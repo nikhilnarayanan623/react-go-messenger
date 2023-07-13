@@ -6,11 +6,11 @@ import (
 )
 
 type chatUseCase struct {
-	fileRepo repoInterface.ChatRepository
+	chatRepo repoInterface.ChatRepository
 }
 
-func NewChatUseCase(fileRepo repoInterface.ChatRepository) interfaces.ChatUseCase {
+func NewChatUseCase(chatRepo repoInterface.ChatRepository) interfaces.ChatUseCase {
 	return &chatUseCase{
-		fileRepo: fileRepo,
+		chatRepo: chatRepo,
 	}
 }
