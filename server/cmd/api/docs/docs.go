@@ -16,6 +16,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/auth/google-auth": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for user to login with google",
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Login with google (User)",
+                "operationId": "UserGoogleLogin",
+                "parameters": [
+                    {
+                        "description": "Google Token Input",
+                        "name": "inputs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GoogleLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged in with google",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid inputs",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to login",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/auth/login": {
             "post": {
                 "security": [
@@ -198,6 +244,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "request.GoogleLogin": {
+            "type": "object",
+            "required": [
+                "token"
+            ],
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
         "request.Login": {
             "type": "object",
             "required": [
@@ -211,11 +268,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 30,
                     "minLength": 5
-                },
-                "phone": {
-                    "type": "string",
-                    "maxLength": 10,
-                    "minLength": 10
                 },
                 "user_name": {
                     "type": "string",
@@ -237,7 +289,6 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "age",
-                "confirm_password",
                 "email",
                 "first_name",
                 "last_name",
@@ -246,10 +297,8 @@ const docTemplate = `{
             ],
             "properties": {
                 "age": {
-                    "type": "integer"
-                },
-                "confirm_password": {
-                    "type": "string"
+                    "type": "integer",
+                    "minimum": 13
                 },
                 "email": {
                     "type": "string"
@@ -265,7 +314,9 @@ const docTemplate = `{
                     "minLength": 1
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 5
                 },
                 "user_name": {
                     "type": "string",
