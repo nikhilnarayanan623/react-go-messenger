@@ -29,4 +29,5 @@ func SetupRoutes(api *gin.RouterGroup, authHandler interfaces.AuthHandler,
 
 	}
 
+
 }

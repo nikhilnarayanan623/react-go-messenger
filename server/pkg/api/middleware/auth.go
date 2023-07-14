@@ -27,11 +27,12 @@ func (c *middleware) authorize(tokenUser token.UserType) gin.HandlerFunc {
 
 		authFields := strings.Fields(authorizationValues)
 		if len(authFields) < 2 {
+			c.middlewareUsingCookie(ctx, tokenUser)
 
-			err := errors.New("authorization token not provided")
+			// err := errors.New("authorization token not provided")
 
-			response.ErrorResponse(ctx, http.StatusUnauthorized, "Failed to authorize request", err, nil)
-			ctx.Abort()
+			// response.ErrorResponse(ctx, http.StatusUnauthorized, "Failed to authorize request", err, nil)
+			// ctx.Abort()
 			return
 		}
 
@@ -60,4 +61,32 @@ func (c *middleware) authorize(tokenUser token.UserType) gin.HandlerFunc {
 
 		ctx.Set("userId", verifyRes.UserID)
 	}
+}
+
+// for swagger
+func (c *middleware) middlewareUsingCookie(ctx *gin.Context, tokenUser token.UserType) {
+
+	cookieName := "auth-" + string(tokenUser)
+	accessToken, err := ctx.Cookie(cookieName)
+
+	if err != nil || accessToken == "" {
+		if accessToken == "" {
+			err = errors.Join(err, errors.New("access token not found"))
+		}
+		response.ErrorResponse(ctx, http.StatusUnauthorized, "Unauthorized user", err, nil)
+		ctx.Abort()
+		return
+	}
+	verifyRes, err := c.tokenService.VerifyToken(token.VerifyTokenRequest{
+		TokenString: accessToken,
+		UsedFor:     tokenUser,
+	})
+
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusUnauthorized, "Unauthorized user", err, nil)
+		ctx.Abort()
+		return
+	}
+
+	ctx.Set("userId", verifyRes.UserID)
 }
