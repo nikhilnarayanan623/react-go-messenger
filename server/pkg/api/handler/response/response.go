@@ -14,7 +14,7 @@ type Response struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
-func SuccessResponse(ctx *gin.Context, statusCode int, message string, data ...interface{}) {
+func SuccessResponse(ctx *gin.Context, statusCode int, message string, data interface{}) {
 
 	log.Printf("\033[0;32m%s\033[0m\n", message)
 

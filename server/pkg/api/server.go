@@ -18,7 +18,8 @@ type Server struct {
 }
 
 func NewServerHTTP(cfg config.Config, authHandler interfaces.AuthHandler,
-	middleware middleware.Middleware, chatHandler interfaces.ChatHandler) *Server {
+	middleware middleware.Middleware, userHandler interfaces.UserHandler,
+	chatHandler interfaces.ChatHandler) *Server {
 
 	engine := gin.New()
 	// engine.Use(cors.Default())
@@ -29,7 +30,7 @@ func NewServerHTTP(cfg config.Config, authHandler interfaces.AuthHandler,
 
 	api := engine.Group("/api")
 
-	routes.SetupRoutes(api, authHandler, middleware, chatHandler)
+	routes.SetupRoutes(api, authHandler, middleware, userHandler, chatHandler)
 
 	return &Server{
 		engine: engine,
