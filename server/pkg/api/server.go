@@ -1,13 +1,13 @@
 package http
 
 import (
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler/interfaces"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/middleware"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/routes"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/config"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/interfaces"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/middleware"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/routes"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/config"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/nikhilnarayanan623/go-socket-chat/server/cmd/api/docs"
+	_ "github.com/nikhilnarayanan623/server/react-go-messenger/cmd/api/docs"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

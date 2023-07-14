@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler/response"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/service/token"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/response"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/token"
 )
 
 const (

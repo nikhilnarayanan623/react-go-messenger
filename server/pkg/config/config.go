@@ -6,13 +6,15 @@ import (
 )
 
 type Config struct {
-	Port       string `mapstructure:"PORT"`
-	DBHost     string `mapstructure:"DB_HOST"`
-	DBName     string `mapstructure:"DB_NAME"`
-	DBUser     string `mapstructure:"DB_USER"`
-	DBPort     string `mapstructure:"DB_PORT"`
-	DBPassword string `mapstructure:"DB_PASSWORD"`
-	JwtKey     string `mapstructure:"JWT_KEY"`
+	Port               string `mapstructure:"PORT"`
+	DBHost             string `mapstructure:"DB_HOST"`
+	DBName             string `mapstructure:"DB_NAME"`
+	DBUser             string `mapstructure:"DB_USER"`
+	DBPort             string `mapstructure:"DB_PORT"`
+	DBPassword         string `mapstructure:"DB_PASSWORD"`
+	JwtKey             string `mapstructure:"JWT_KEY"`
+	GoAuthClientId     string `mapstructure:"GOAUTH_CLIENT_ID"`
+	GoAuthClientSecret string `mapstructure:"GOAUTH_CLIENT_SECRET"`
 }
 
 var envs = []string{

@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler/interfaces"
-	usecase "github.com/nikhilnarayanan623/go-socket-chat/server/pkg/usecase/interfaces"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/interfaces"
+	usecase "github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase/interfaces"
 )
 
 type chatHandler struct {

@@ -3,7 +3,7 @@ package interfaces
 import (
 	"context"
 
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/domain"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/domain"
 )
 
 type AuthRepository interface {
