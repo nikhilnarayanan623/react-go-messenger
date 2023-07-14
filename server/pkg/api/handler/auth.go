@@ -33,7 +33,7 @@ func NewAuthHandler(authUsecase usecaseInterface.AuthUseCase) interfaces.AuthHan
 // @Tags User Authentication
 // @Param        inputs   body     request.Login{}   true  "Login Details"
 // @Router /api/auth/login [post]
-// @Success 200 {object} response.Response{} "Successfully logged in"
+// @Success 200 {object} response.Response{data=response.TokenResponse{}} "Successfully logged in"
 // @Failure 400 {object} response.Response{}  "Invalid inputs"
 // @Failure 403 {object} response.Response{}  "User blocked by admin"
 // @Failure 401 {object} response.Response{}  "User not exist with given login credentials"
@@ -80,7 +80,7 @@ func (c *AuthHandler) UserLogin(ctx *gin.Context) {
 // @Tags User Authentication
 // @Param        inputs   body     request.GoogleLogin{}   true  "Google Token Input"
 // @Router /api/auth/google-auth [post]
-// @Success 200 {object} response.Response{} "Successfully logged in with google"
+// @Success 200 {object} response.Response{data=response.TokenResponse{}} "Successfully logged in with google"
 // @Failure 400 {object} response.Response{}  "Invalid inputs"
 // @Failure 500 {object} response.Response{}  "Failed to login"
 func (c *AuthHandler) UserGoogleLogin(ctx *gin.Context) {
@@ -181,7 +181,7 @@ func (c *AuthHandler) UserSignUp(ctx *gin.Context) {
 		return
 	}
 
-	response.SuccessResponse(ctx, http.StatusCreated, "Successfully Account Created")
+	response.SuccessResponse(ctx, http.StatusCreated, "Successfully Account Created", nil)
 }
 
 // UserRenewAccessToken godoc
@@ -192,7 +192,7 @@ func (c *AuthHandler) UserSignUp(ctx *gin.Context) {
 // @Tags User Authentication
 // @Param input body request.RefreshToken{} true "Refresh token"
 // @Router /api/auth/renew-access-token [post]
-// @Success 200 {object} response.Response{} "Successfully generated access token using refresh token"
+// @Success 200 {object} response.Response{data=response.TokenResponse{}} "Successfully generated access token using refresh token"
 // @Failure 400 {object} response.Response{} "Invalid input"
 // @Failure 401 {object} response.Response{} "Invalid refresh token"
 // @Failure 404 {object} response.Response{} "No session found for the given refresh token"
