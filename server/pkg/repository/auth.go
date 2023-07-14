@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/domain"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/repository/interfaces"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/domain"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/repository/interfaces"
 	"gorm.io/gorm"
 )
 

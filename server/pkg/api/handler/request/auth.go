@@ -7,6 +7,10 @@ type Login struct {
 	Password string `json:"password" binding:"required,min=5,max=30"`
 }
 
+type GoogleLogin struct {
+	TokenCode string `json:"token" binding:"required"`
+}
+
 type UserSignUp struct {
 	UserName        string `json:"user_name"  binding:"required,min=3,max=15"`
 	FirstName       string `json:"first_name"  binding:"required,min=2,max=50"`

@@ -7,14 +7,15 @@
 package di
 
 import (
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/middleware"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/config"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/db"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/repository"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/service/token"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/usecase"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/middleware"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/config"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/db"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/repository"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/google"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/token"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase"
 )
 
 // Injectors from wire.go:
@@ -26,8 +27,9 @@ func InitializeAPI(cfg config.Config) (*http.Server, error) {
 	}
 	authRepository := repository.NewAuthRepository(gormDB)
 	tokenService := token.NewTokenService(cfg)
+	googleAuth := google.NewGoogleAuth(cfg)
 	userRepository := repository.NewUserRepository(gormDB)
-	authUseCase := usecase.NewAuthUseCase(authRepository, tokenService, userRepository)
+	authUseCase := usecase.NewAuthUseCase(authRepository, tokenService, googleAuth, userRepository)
 	authHandler := handler.NewAuthHandler(authUseCase)
 	middlewareMiddleware := middleware.NewMiddleware(tokenService)
 	chatRepository := repository.NewChatRepository(gormDB)

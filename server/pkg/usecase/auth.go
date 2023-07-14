@@ -6,28 +6,30 @@ import (
 	"log"
 	"time"
 
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler/request"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/domain"
-	repo "github.com/nikhilnarayanan623/go-socket-chat/server/pkg/repository/interfaces"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/service/token"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/usecase/interfaces"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/utils"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/request"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/domain"
+	repo "github.com/nikhilnarayanan623/server/react-go-messenger/pkg/repository/interfaces"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/google"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/token"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase/interfaces"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/utils"
 )
 
 type authUseCase struct {
-	authRepo repo.AuthRepository
-
+	authRepo     repo.AuthRepository
+	googleAuth   google.GoogleAuth
 	userRepo     repo.UserRepository
 	tokenService token.TokenService
 }
 
 func NewAuthUseCase(authRepo repo.AuthRepository, tokenService token.TokenService,
-	userRepo repo.UserRepository) interfaces.AuthUseCase {
+	googleAuth google.GoogleAuth, userRepo repo.UserRepository) interfaces.AuthUseCase {
 
 	return &authUseCase{
-		userRepo:     userRepo,
-		tokenService: tokenService,
 		authRepo:     authRepo,
+		googleAuth:   googleAuth,
+		tokenService: tokenService,
+		userRepo:     userRepo,
 	}
 }
 
@@ -60,6 +62,38 @@ func (c *authUseCase) UserLogin(ctx context.Context, loginDetails request.Login)
 	}
 
 	return user.ID, nil
+}
+
+func (c *authUseCase) GoogleLogin(ctx context.Context, token string) (userID uint, err error) {
+
+	googleUser, err := c.googleAuth.Verify(ctx, token)
+	if err != nil {
+		return 0, err
+	}
+
+	existUser, err := c.userRepo.FindUserByEmail(ctx, googleUser.Email)
+	if err != nil {
+		return userID, fmt.Errorf("failed to get user details with given email \nerror:%v", err.Error())
+	}
+
+	if existUser.ID != 0 {
+		return existUser.ID, nil
+	}
+
+	// user := domain.User{
+	// 	GoogleImage: googleUser.Picture,
+	// 	FirstName: ,
+	// }
+
+	// // create a random user name for user based on user name
+	// user.UserName = utils.GenerateRandomUserName(user.FirstName)
+
+	// userID, err = c.userRepo.SaveUser(ctx, user)
+	// if err != nil {
+	// 	return userID, fmt.Errorf("failed to save user details \nerror:%v", err.Error())
+	// }
+
+	return userID, nil
 }
 
 func (c *authUseCase) GenerateAccessToken(ctx context.Context, tokenParams interfaces.GenerateTokenParams) (string, error) {

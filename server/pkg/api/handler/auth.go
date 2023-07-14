@@ -6,13 +6,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler/interfaces"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler/request"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler/response"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/domain"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/service/token"
-	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/usecase"
-	usecaseInterface "github.com/nikhilnarayanan623/go-socket-chat/server/pkg/usecase/interfaces"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/interfaces"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/request"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/response"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/domain"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/token"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase"
+	usecaseInterface "github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase/interfaces"
 )
 
 type AuthHandler struct {
@@ -69,6 +69,34 @@ func (c *AuthHandler) UserLogin(ctx *gin.Context) {
 	}
 
 	// common functionality for admin and user
+	c.setupTokenAndResponse(ctx, token.User, userID)
+}
+
+// UserGoogleLogin godoc
+// @Summary Login with google (User)
+// @Description API for user to login with google
+// @Security ApiKeyAuth
+// @Id UserGoogleLogin
+// @Tags User Authentication
+// @Param        inputs   body     request.GoogleLogin{}   true  "Google Token Input"
+// @Router /api/auth/google-auth [post]
+// @Success 200 {object} response.Response{} "Successfully logged in with google"
+// @Failure 400 {object} response.Response{}  "Invalid inputs"
+// @Failure 500 {object} response.Response{}  "Failed to login"
+func (c *AuthHandler) UserGoogleLogin(ctx *gin.Context) {
+	var body request.GoogleLogin
+
+	if err := ctx.ShouldBind(&body); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, BindJsonFailMessage, err, body)
+		return
+	}
+
+	userID, err := c.authUseCase.GoogleLogin(ctx, body.TokenCode)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusInternalServerError, "Failed to login with google", err, nil)
+		return
+	}
+
 	c.setupTokenAndResponse(ctx, token.User, userID)
 }
 
