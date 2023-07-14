@@ -1,7 +1,20 @@
-import { object, string,ref } from "yup";
+import { object, string, number, ref } from "yup";
 export const userLoginValidationSchema = object().shape({
-    email: string().email("Invalid email").required("Email is required"),
-    password: string().required("Password is required"),
-  });
+  email: string().email("Invalid email").required("Email is required"),
+  password: string().required("Password is required"),
+});
 
-
+export const userRegisterValidationSchema = object().shape({
+  firstName: string().trim().required("First Name is required"),
+  lastName: string().trim().required("Last Name is required"),
+  email: string().email("Invalid email").trim().required("Email is required"),
+  age: number()
+    .typeError("Age must be a number")
+    .required("Age is required")
+    .min(13, "Minimum age must be 13")
+    .max(100, "Maximum age is 100"),
+  password: string().required("Password is required"),
+  confirmPassword: string()
+    .oneOf([ref("password")], "Passwords must match")
+    .required("Confirm Password is required"),
+});
