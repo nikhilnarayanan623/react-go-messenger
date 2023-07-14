@@ -9,9 +9,11 @@ package di
 import (
 	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api"
 	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/handler"
+	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/api/middleware"
 	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/config"
 	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/db"
 	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/repository"
+	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/service/token"
 	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/usecase"
 )
 
@@ -22,9 +24,15 @@ func InitializeAPI(cfg config.Config) (*http.Server, error) {
 	if err != nil {
 		return nil, err
 	}
+	authRepository := repository.NewAuthRepository(gormDB)
+	tokenService := token.NewTokenService(cfg)
+	userRepository := repository.NewUserRepository(gormDB)
+	authUseCase := usecase.NewAuthUseCase(authRepository, tokenService, userRepository)
+	authHandler := handler.NewAuthHandler(authUseCase)
+	middlewareMiddleware := middleware.NewMiddleware(tokenService)
 	chatRepository := repository.NewChatRepository(gormDB)
 	chatUseCase := usecase.NewChatUseCase(chatRepository)
 	chatHandler := handler.NewChatHandler(chatUseCase)
-	server := http.NewServerHTTP(cfg, chatHandler)
+	server := http.NewServerHTTP(cfg, authHandler, middlewareMiddleware, chatHandler)
 	return server, nil
 }
