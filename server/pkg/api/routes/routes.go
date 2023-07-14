@@ -7,7 +7,8 @@ import (
 )
 
 func SetupRoutes(api *gin.RouterGroup, authHandler interfaces.AuthHandler,
-	middleware middleware.Middleware, chatHandler interfaces.ChatHandler) {
+	middleware middleware.Middleware, userHandler interfaces.UserHandler,
+	chatHandler interfaces.ChatHandler) {
 
 	auth := api.Group("/auth")
 	{
@@ -28,6 +29,10 @@ func SetupRoutes(api *gin.RouterGroup, authHandler interfaces.AuthHandler,
 		// api.POST("/logout")
 
 	}
+	api.Use(middleware.AuthenticateUser())
 
-
+	user := api.Group("/users")
+	{
+		user.GET("/all", userHandler.ListUsers)
+	}
 }

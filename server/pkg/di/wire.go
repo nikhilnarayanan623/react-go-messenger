@@ -32,9 +32,11 @@ func InitializeAPI(cfg config.Config) (*http.Server, error) {
 
 		usecase.NewAuthUseCase,
 		usecase.NewChatUseCase,
+		usecase.NewUserUseCase,
 
 		handler.NewAuthHandler,
 		handler.NewChatHandler,
+		handler.NewUserHandler,
 
 		http.NewServerHTTP,
 	)

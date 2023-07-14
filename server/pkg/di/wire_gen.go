@@ -32,9 +32,11 @@ func InitializeAPI(cfg config.Config) (*http.Server, error) {
 	authUseCase := usecase.NewAuthUseCase(authRepository, tokenService, googleAuth, userRepository)
 	authHandler := handler.NewAuthHandler(authUseCase)
 	middlewareMiddleware := middleware.NewMiddleware(tokenService)
+	userUseCase := usecase.NewUserUseCase(userRepository)
+	userHandler := handler.NewUserHandler(userUseCase)
 	chatRepository := repository.NewChatRepository(gormDB)
 	chatUseCase := usecase.NewChatUseCase(chatRepository)
 	chatHandler := handler.NewChatHandler(chatUseCase)
-	server := http.NewServerHTTP(cfg, authHandler, middlewareMiddleware, chatHandler)
+	server := http.NewServerHTTP(cfg, authHandler, middlewareMiddleware, userHandler, chatHandler)
 	return server, nil
 }
