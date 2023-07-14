@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/config"
+	"github.com/nikhilnarayanan623/go-socket-chat/server/pkg/domain"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -22,7 +23,10 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 	}
 
 	// migrate the database tables
-	err = db.AutoMigrate()
+	err = db.AutoMigrate(
+		domain.User{},
+		domain.RefreshSession{},
+	)
 
 	if err != nil {
 		return nil, err
