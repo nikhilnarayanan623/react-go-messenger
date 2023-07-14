@@ -128,8 +128,11 @@ func (c *AuthHandler) setupTokenAndResponse(ctx *gin.Context, tokenUser token.Us
 
 	//ctx.Header("access_token", accessToken)
 	//ctx.Header("refresh_token", refreshToken)
-	cookieName := "auth-" + string(tokenUser)
-	ctx.SetCookie(cookieName, accessToken, 15*60, "", "", false, true)
+
+	{ // for swagger documentation set up cookie
+		cookieName := "auth-" + string(tokenUser)
+		ctx.SetCookie(cookieName, accessToken, 15*60, "", "", false, true)
+	}
 
 	tokenRes := response.TokenResponse{
 		AccessToken:  accessToken,
@@ -147,7 +150,7 @@ func (c *AuthHandler) setupTokenAndResponse(ctx *gin.Context, tokenUser token.Us
 // @Tags User Authentication
 // @Param input body request.UserSignUp{} true "Input Fields"
 // @Router /api/auth/signup [post]
-// @Success 200 {object} response.Response{} "Successfully Account Created"
+// @Success 201 {object} response.Response{} "Successfully Account Created"
 // @Failure 400 {object} response.Response{} "Invalid input"
 // @Failure 409 {object} response.Response{} "A verified user already exist with given user credentials"
 // @Failure 500 {object} response.Response{} "Failed to signup"
