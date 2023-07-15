@@ -3,11 +3,11 @@ package usecase
 import (
 	"context"
 
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/request"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/response"
-	repo "github.com/nikhilnarayanan623/server/react-go-messenger/pkg/repository/interfaces"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase/interfaces"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/utils"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/response"
+	repo "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/repository/interfaces"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase/interfaces"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/utils"
 )
 
 type userUseCase struct {

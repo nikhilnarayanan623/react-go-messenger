@@ -4,15 +4,15 @@
 package di
 
 import (
-	http "github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/middleware"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/config"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/db"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/repository"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/google"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/token"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase"
+	http "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/middleware"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/config"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/db"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/repository"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/service/google"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/service/token"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase"
 
 	"github.com/google/wire"
 )

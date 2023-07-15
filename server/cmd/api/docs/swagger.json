@@ -328,6 +328,127 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for user create a new chat with other user if already exist will return then existing chat id",
+                "tags": [
+                    "Users Chats"
+                ],
+                "summary": "Save New chat (User)",
+                "operationId": "SaveChat",
+                "parameters": [
+                    {
+                        "description": "Input fields",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.Chat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully chat saved",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Failed save to chat for user",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/chats/{chat_id}/messages": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for user to get all messages in a specific chat",
+                "tags": [
+                    "Users Chats"
+                ],
+                "summary": "Get chats messages (User)",
+                "operationId": "GetAllMessages",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Chat ID",
+                        "name": "chat_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page Number",
+                        "name": "page_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Count",
+                        "name": "count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved message for the chat",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.Message"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "204": {
+                        "description": "There is no message between users",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve message for this chat",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/users/all": {
@@ -396,6 +517,17 @@
         }
     },
     "definitions": {
+        "request.Chat": {
+            "type": "object",
+            "required": [
+                "other_user_id"
+            ],
+            "properties": {
+                "other_user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.GoogleLogin": {
             "type": "object",
             "required": [
@@ -497,6 +629,23 @@
                 },
                 "user_name": {
                     "type": "string"
+                }
+            }
+        },
+        "response.Message": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "is_current_user": {
+                    "type": "boolean"
+                },
+                "message_id": {
+                    "type": "integer"
                 }
             }
         },
