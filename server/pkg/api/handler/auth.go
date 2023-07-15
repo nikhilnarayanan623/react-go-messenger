@@ -32,7 +32,7 @@ func NewAuthHandler(authUsecase usecaseInterface.AuthUseCase) interfaces.AuthHan
 // @Id UserLogin
 // @Tags User Authentication
 // @Param        inputs   body     request.Login{}   true  "Login Details"
-// @Router /api/auth/login [post]
+// @Router /auth/sign-in [post]
 // @Success 200 {object} response.Response{data=response.TokenResponse{}} "Successfully logged in"
 // @Failure 400 {object} response.Response{}  "Invalid inputs"
 // @Failure 403 {object} response.Response{}  "User blocked by admin"
@@ -79,7 +79,7 @@ func (c *AuthHandler) UserLogin(ctx *gin.Context) {
 // @Id UserGoogleLogin
 // @Tags User Authentication
 // @Param        inputs   body     request.GoogleLogin{}   true  "Google Token Input"
-// @Router /api/auth/google-auth [post]
+// @Router /auth/google-sign-in [post]
 // @Success 200 {object} response.Response{data=response.TokenResponse{}} "Successfully logged in with google"
 // @Failure 400 {object} response.Response{}  "Invalid inputs"
 // @Failure 500 {object} response.Response{}  "Failed to login"
@@ -143,17 +143,17 @@ func (c *AuthHandler) setupTokenAndResponse(ctx *gin.Context, tokenUser token.Us
 }
 
 // UserSignUp godoc
-// @Summary Signup (User)
+// @Summary Sign up (User)
 // @Description API for user to register a new account
 // @Security ApiKeyAuth
 // @Id UserSignUp
 // @Tags User Authentication
 // @Param input body request.UserSignUp{} true "Input Fields"
-// @Router /api/auth/signup [post]
+// @Router /auth/sign-up [post]
 // @Success 201 {object} response.Response{} "Successfully Account Created"
 // @Failure 400 {object} response.Response{} "Invalid input"
 // @Failure 409 {object} response.Response{} "A verified user already exist with given user credentials"
-// @Failure 500 {object} response.Response{} "Failed to signup"
+// @Failure 500 {object} response.Response{} "Failed to sign up"
 func (c *AuthHandler) UserSignUp(ctx *gin.Context) {
 
 	var body request.UserSignUp
@@ -191,7 +191,7 @@ func (c *AuthHandler) UserSignUp(ctx *gin.Context) {
 // @Id UserRenewAccessToken
 // @Tags User Authentication
 // @Param input body request.RefreshToken{} true "Refresh token"
-// @Router /api/auth/renew-access-token [post]
+// @Router /auth/renew-access-token [post]
 // @Success 200 {object} response.Response{data=response.TokenResponse{}} "Successfully generated access token using refresh token"
 // @Failure 400 {object} response.Response{} "Invalid input"
 // @Failure 401 {object} response.Response{} "Invalid refresh token"

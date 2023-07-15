@@ -10,24 +10,25 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 	middleware middleware.Middleware, userHandler interfaces.UserHandler,
 	chatHandler interfaces.ChatHandler) {
 
+	auth := api.Group("")
 	{ // auth
-		api.POST(SignUpUrl, authHandler.UserSignUp)
-		api.POST(SignInUrl, authHandler.UserLogin)
-		api.POST(GoogleSignInUrl, authHandler.UserGoogleLogin)
-		api.POST(RenewAccessTokenUrl, authHandler.UserRenewAccessToken())
+		auth.POST(SignUpUrl, authHandler.UserSignUp)
+		auth.POST(SignInUrl, authHandler.UserLogin)
+		auth.POST(GoogleSignInUrl, authHandler.UserGoogleLogin)
+		auth.POST(RenewAccessTokenUrl, authHandler.UserRenewAccessToken())
 	}
 
-	// r := api.Use(middleware.AuthenticateUser())
+	authorized := api.Group("", middleware.AuthenticateUser())
 
 	{ // user
-		api.GET(ListAllUsersUrl, userHandler.ListUsers)
+		authorized.GET(ListAllUsersUrl, userHandler.ListUsers)
 	}
 
 	{ //chats
 
-		api.GET(RecentChatsUrl, chatHandler.GetRecentChats)
-		api.POST(CreateChatUrl, chatHandler.SaveChat)
+		authorized.GET(RecentChatsUrl, chatHandler.GetRecentChats)
+		authorized.POST(CreateChatUrl, chatHandler.SaveChat)
 
-		api.GET(ListAllMessagesUrl, chatHandler.GetAllMessages)
+		authorized.GET(ListAllMessagesUrl, chatHandler.GetAllMessages)
 	}
 }

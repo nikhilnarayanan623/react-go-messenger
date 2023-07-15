@@ -16,7 +16,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/auth/google-auth": {
+        "/auth/google-sign-in": {
             "post": {
                 "security": [
                     {
@@ -74,77 +74,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/auth/login": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "API for user to login with email | phone | user_name with password",
-                "tags": [
-                    "User Authentication"
-                ],
-                "summary": "Login with password (User)",
-                "operationId": "UserLogin",
-                "parameters": [
-                    {
-                        "description": "Login Details",
-                        "name": "inputs",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.Login"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully logged in",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.TokenResponse"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid inputs",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "User not exist with given login credentials",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "403": {
-                        "description": "User blocked by admin",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Failed to login",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/auth/renew-access-token": {
+        "/auth/renew-access-token": {
             "post": {
                 "security": [
                     {
@@ -226,7 +156,77 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/auth/signup": {
+        "/auth/sign-in": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for user to login with email | phone | user_name with password",
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Login with password (User)",
+                "operationId": "UserLogin",
+                "parameters": [
+                    {
+                        "description": "Login Details",
+                        "name": "inputs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged in",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.TokenResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid inputs",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "User not exist with given login credentials",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "403": {
+                        "description": "User blocked by admin",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to login",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sign-up": {
             "post": {
                 "security": [
                     {
@@ -278,7 +278,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/chats": {
+        "/chats": {
             "get": {
                 "security": [
                     {
@@ -392,7 +392,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/chats/{chat_id}/messages": {
+        "/chats/{chat_id}/messages": {
             "get": {
                 "security": [
                     {
@@ -463,7 +463,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users/all": {
+        "/users": {
             "get": {
                 "security": [
                     {

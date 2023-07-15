@@ -7,7 +7,7 @@ import (
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/config"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/nikhilnarayanan623/react-go-messenger/server/cmd/api/docs"
+	docs "github.com/nikhilnarayanan623/react-go-messenger/server/cmd/api/docs"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -25,6 +25,8 @@ func NewServerHTTP(cfg config.Config, authHandler interfaces.AuthHandler,
 
 	engine.Use(middleware.Cors())
 	engine.Use(gin.Logger())
+
+	docs.SwaggerInfo.BasePath = routes.BaseUrl
 
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
