@@ -6,13 +6,13 @@ import (
 	"log"
 	"time"
 
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/request"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/domain"
-	repo "github.com/nikhilnarayanan623/server/react-go-messenger/pkg/repository/interfaces"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/google"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/token"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase/interfaces"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/utils"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/domain"
+	repo "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/repository/interfaces"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/service/google"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/service/token"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase/interfaces"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/utils"
 )
 
 type authUseCase struct {

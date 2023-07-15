@@ -3,8 +3,8 @@ package db
 import (
 	"fmt"
 
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/config"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/domain"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/config"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/domain"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/token"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/service/token"
 )
 
 type Middleware interface {

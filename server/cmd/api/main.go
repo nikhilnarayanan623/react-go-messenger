@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/config"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/di"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/config"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/di"
 )
 
 func main() {

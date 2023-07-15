@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/config"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/config"
 	"github.com/stretchr/testify/assert"
 )
 
