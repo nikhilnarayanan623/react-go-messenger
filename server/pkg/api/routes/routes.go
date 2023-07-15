@@ -22,4 +22,9 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 	{ // user
 		api.POST(ListAllUsersUrl, userHandler.ListUsers)
 	}
+
+	{ //chats
+
+		api.GET(RecentChatsUrl, chatHandler.GetRecentChats)
+	}
 }

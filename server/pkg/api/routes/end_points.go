@@ -11,4 +11,7 @@ const (
 
 	UserBaseUrl     = BaseUrl + "/users"
 	ListAllUsersUrl = "/all"
+
+	ChatBaseUrl    = BaseUrl + "/chats"
+	RecentChatsUrl = ChatBaseUrl + ""
 )

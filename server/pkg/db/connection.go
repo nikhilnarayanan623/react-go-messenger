@@ -26,6 +26,8 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 	err = db.AutoMigrate(
 		domain.User{},
 		domain.RefreshSession{},
+		domain.Chat{},
+		domain.Message{},
 	)
 
 	if err != nil {

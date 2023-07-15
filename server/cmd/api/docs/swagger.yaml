@@ -58,6 +58,21 @@ definitions:
     - password
     - user_name
     type: object
+  response.Chat:
+    properties:
+      chat_id:
+        type: integer
+      first_name:
+        type: string
+      last_message:
+        type: string
+      last_message_at:
+        type: string
+      profile_picture:
+        type: string
+      user_name:
+        type: string
+    type: object
   response.Response:
     properties:
       data: {}
@@ -251,6 +266,44 @@ paths:
       summary: Signup (User)
       tags:
       - User Authentication
+  /api/chats:
+    get:
+      description: API for user to get all recent chats of user with others
+      operationId: GetRecentChats
+      parameters:
+      - description: Page Number
+        in: query
+        name: page_number
+        type: integer
+      - description: Count
+        in: query
+        name: count
+        type: integer
+      responses:
+        "200":
+          description: Successfully retrieved recent chats of user
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.Chat'
+                  type: array
+              type: object
+        "204":
+          description: There is no chats recent chats for users
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Failed to retrieved recent chats of user
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user chats (User)
+      tags:
+      - Users Chats
   /api/users/all:
     get:
       description: API for user to list all users in the application
