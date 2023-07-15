@@ -5,6 +5,7 @@ import (
 
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/response"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/domain"
 	repoInterface "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/repository/interfaces"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase/interfaces"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/utils"
@@ -60,4 +61,37 @@ func (c *chatUseCase) FindAllMessagesOfUserForAChat(ctx context.Context,
 	}
 
 	return messages, nil
+}
+
+func (c *chatUseCase) SaveMessage(ctx context.Context, message domain.Message) (uint, error) {
+
+	var (
+		errChan    = make(chan error, 2)
+		receiverID uint
+	)
+
+	go func() {
+		err := c.chatRepo.SaveMessage(ctx, message)
+		errChan <- err
+	}()
+
+	go func() {
+		rID, err := c.chatRepo.FindReceiverOfChatBySenderID(ctx, message.ChatID, message.SenderID)
+		receiverID = rID
+		errChan <- err
+	}()
+
+	for i := 1; i <= 2; i++ {
+
+		select {
+		case err := <-errChan:
+			if err != nil {
+				return 0, err
+			}
+		case <-ctx.Done():
+			return 0, nil
+		}
+	}
+
+	return receiverID, nil
 }

@@ -19,4 +19,5 @@ const (
 	RecentChatsUrl     = ChatBaseUrl
 	CreateChatUrl      = ChatBaseUrl
 	ListAllMessagesUrl = ChatBaseUrl + "/:chat_id/messages"
+	SaveMessageUrl     = ChatBaseUrl + "/:chat_id/messages"
 )
