@@ -1,6 +1,9 @@
 package repository
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/request"
+	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/response"
 	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/repository/interfaces"
 
 	"gorm.io/gorm"
@@ -14,4 +17,24 @@ func NewChatRepository(db *gorm.DB) interfaces.ChatRepository {
 	return &chatDatabase{
 		db: db,
 	}
+}
+
+func (c *chatDatabase) FindAllRecentChatsOfUser(ctx *gin.Context, userID uint,
+	pagination request.Pagination) (chats []response.Chat, err error) {
+
+	limit := pagination.Count
+	offset := (pagination.PageNumber - 1) * limit
+
+	query := `SELECT DISTINCT ON (chats.id) chats.id, he.first_name, he.user_name,
+	he.google_image AS profile_picture, messages.content AS last_message, messages.created_at AS last_message_at
+	FROM chats
+	INNER JOIN users me ON  me.id = chats.user1_id OR me.id = chats.user2_id
+	INNER JOIN users he ON he.id = chats.user1_id OR he.id = chats.user2_id
+	INNER JOIN messages ON messages.chat_id = chats.id
+	WHERE me.id = $1 AND he.id != $1 ORDER BY chats.id, messages.created_at DESC 
+	LIMIT $2 OFFSET $3`
+
+	err = c.db.Raw(query, userID, limit, offset).Scan(&chats).Error
+
+	return
 }
