@@ -6,13 +6,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/interfaces"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/request"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/response"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/domain"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/service/token"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase"
-	usecaseInterface "github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase/interfaces"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/interfaces"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/response"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/domain"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/service/token"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase"
+	usecaseInterface "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase/interfaces"
 )
 
 type AuthHandler struct {

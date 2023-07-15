@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/config"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/config"
 	"google.golang.org/api/idtoken"
 )
 

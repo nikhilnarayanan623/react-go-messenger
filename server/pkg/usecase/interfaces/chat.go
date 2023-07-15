@@ -3,8 +3,8 @@ package interfaces
 import (
 	"context"
 
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/request"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/response"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/response"
 )
 
 type ChatUseCase interface {

@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/interfaces"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/request"
-	"github.com/nikhilnarayanan623/server/react-go-messenger/pkg/api/handler/response"
-	usecase "github.com/nikhilnarayanan623/server/react-go-messenger/pkg/usecase/interfaces"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/interfaces"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/response"
+	usecase "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase/interfaces"
 )
 
 type chatHandler struct {

@@ -1,4 +1,4 @@
-module github.com/nikhilnarayanan623/server/react-go-messenger
+module github.com/nikhilnarayanan623/react-go-messenger/server
 
 go 1.20
 
