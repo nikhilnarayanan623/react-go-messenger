@@ -27,5 +27,7 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 
 		api.GET(RecentChatsUrl, chatHandler.GetRecentChats)
 		api.POST(CreateChatUrl, chatHandler.SaveChat)
+
+		api.GET(ListAllMessagesUrl, chatHandler.GetAllMessages)
 	}
 }

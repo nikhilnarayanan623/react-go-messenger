@@ -50,3 +50,14 @@ func (c *chatUseCase) SaveChat(ctx context.Context, user1ID, user2ID uint) (uint
 
 	return chatID, nil
 }
+
+func (c *chatUseCase) FindAllMessagesOfUserForAChat(ctx context.Context,
+	chatID, userID uint, pagination request.Pagination) ([]response.Message, error) {
+
+	messages, err := c.chatRepo.FindAllMessagesByChatAndUserID(ctx, chatID, userID, pagination)
+	if err != nil {
+		return nil, utils.PrependMessageToError(err, "failed to get message of the chat from database")
+	}
+
+	return messages, nil
+}

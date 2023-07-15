@@ -10,3 +10,10 @@ type Chat struct {
 	LastMessage    string    `json:"last_message"`
 	LastMessageAt  time.Time `json:"last_message_at"`
 }
+
+type Message struct {
+	ID            uint      `json:"message_id" `
+	IsCurrentUser bool      `json:"is_current_user"`
+	Content       string    `json:"content" gorm:"not null"`
+	CreatedAt     time.Time `json:"created_at" gorm:"not null"`
+}
