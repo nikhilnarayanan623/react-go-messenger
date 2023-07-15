@@ -28,7 +28,7 @@ func NewUserHandler(usecase usecaseInterface.UserUseCase) interfaces.UserHandler
 // @Tags Users
 // @Param page_number query int false "Page Number"
 // @Param count query int false "Count"
-// @Router /api/users/all [get]
+// @Router /users [get]
 // @Success 200 {object} response.Response{data=[]response.User} "Successfully retrieved all users"
 // @Success 204 {object} response.Response{} "There is no users"
 // @Failure 500 {object} response.Response{} "Failed retrieved all users"

@@ -28,7 +28,7 @@ func NewChatHandler(usecase usecase.ChatUseCase) interfaces.ChatHandler {
 // @Tags Users Chats
 // @Param page_number query int false "Page Number"
 // @Param count query int false "Count"
-// @Router /api/chats [get]
+// @Router /chats [get]
 // @Success 200 {object} response.Response{data=[]response.Chat} "Successfully retrieved recent chats of user"
 // @Success 204 {object} response.Response{} "There is no chats recent chats for users"
 // @Failure 500 {object} response.Response{} "Failed to retrieved recent chats of user"
@@ -58,7 +58,7 @@ func (c *chatHandler) GetRecentChats(ctx *gin.Context) {
 // @Id SaveChat
 // @Tags Users Chats
 // @Param input body request.Chat true "Input fields"
-// @Router /api/chats [post]
+// @Router /chats [post]
 // @Success 200 {object} response.Response{data=uint} "Successfully chat saved"
 // @Failure 500 {object} response.Response{} "Failed save to chat for user"
 func (c *chatHandler) SaveChat(ctx *gin.Context) {
@@ -89,7 +89,7 @@ func (c *chatHandler) SaveChat(ctx *gin.Context) {
 // @Param chat_id path int true "Chat ID"
 // @Param page_number query int false "Page Number"
 // @Param count query int false "Count"
-// @Router /api/chats/{chat_id}/messages [get]
+// @Router /chats/{chat_id}/messages [get]
 // @Success 200 {object} response.Response{data=[]response.Message} "Successfully retrieved message for the chat"
 // @Success 204 {object} response.Response{} "There is no message between users"
 // @Failure 500 {object} response.Response{} "Failed to retrieve message for this chat"
