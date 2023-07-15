@@ -6,6 +6,7 @@ import (
 
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/response"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/domain"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/repository/interfaces"
 
 	"gorm.io/gorm"
@@ -73,6 +74,24 @@ func (c *chatDatabase) FindAllMessagesByChatAndUserID(ctx context.Context,
 	ORDER BY created_at DESC LIMIT $3 OFFSET $4`
 
 	err = c.db.Raw(query, userID, chatID, limit, offset).Scan(&messages).Error
+
+	return
+}
+
+func (c *chatDatabase) SaveMessage(ctx context.Context, message domain.Message) error {
+
+	createdAt := time.Now()
+	query := `INSERT INTO messages (chat_id, sender_id, content, created_at) VALUES($1, $2, $3, $4)`
+	err := c.db.Exec(query, message.ChatID, message.SenderID, message.Content, createdAt).Error
+
+	return err
+}
+func (c *chatDatabase) FindReceiverOfChatBySenderID(ctx context.Context,
+	chatID, senderID uint) (receiverID uint, err error) {
+
+	query := `SELECT CASE WHEN user1_id = $1 THEN user2_id ELSE user1_id END AS receiver_id FROM chats 
+	WHERE id = $2`
+	err = c.db.Raw(query, senderID, chatID).Scan(&receiverID).Error
 
 	return
 }

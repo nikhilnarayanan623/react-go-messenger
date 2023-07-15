@@ -30,5 +30,6 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 		authorized.POST(CreateChatUrl, chatHandler.SaveChat)
 
 		authorized.GET(ListAllMessagesUrl, chatHandler.GetAllMessages)
+		authorized.POST(SaveMessageUrl, chatHandler.SaveMessage)
 	}
 }

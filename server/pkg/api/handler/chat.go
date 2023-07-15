@@ -7,6 +7,7 @@ import (
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/interfaces"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/response"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/domain"
 	usecase "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase/interfaces"
 )
 
@@ -114,4 +115,43 @@ func (c *chatHandler) GetAllMessages(ctx *gin.Context) {
 	}
 
 	response.SuccessResponse(ctx, http.StatusOK, "Successfully retrieved message for the chat", messages)
+}
+
+// SaveMessage godoc
+// @Summary Save message (User)
+// @Description API for user to save a new message
+// @Security ApiKeyAuth
+// @Id SaveMessage
+// @Tags Users Chats
+// @Param chat_id path int true "Chat ID"
+// @Param input body request.Message true "Message field"
+// @Router /chats/{chat_id}/messages [post]
+// @Success 200 {object} response.Response{data=uint} "Successfully message saved"
+// @Failure 500 {object} response.Response{} "Failed to save message"
+func (c *chatHandler) SaveMessage(ctx *gin.Context) {
+
+	chatID, err := request.GetParamAsUint(ctx, "chat_id")
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, BindParamFailMessage, err, nil)
+		return
+	}
+	var body request.Message
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, BindJsonFailMessage, err, nil)
+		return
+	}
+
+	message := domain.Message{
+		ChatID:   chatID,
+		SenderID: request.GetUserIdFromContext(ctx),
+		Content:  body.Content,
+	}
+
+	receiverID, err := c.usecase.SaveMessage(ctx, message)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusInternalServerError, "Failed to save message", err, nil)
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusCreated, "Successfully message saved", receiverID)
 }

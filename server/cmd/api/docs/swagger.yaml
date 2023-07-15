@@ -28,6 +28,13 @@ definitions:
     required:
     - password
     type: object
+  request.Message:
+    properties:
+      content:
+        type: string
+    required:
+    - content
+    type: object
   request.RefreshToken:
     properties:
       refresh_token:
@@ -276,12 +283,12 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
         "500":
-          description: Failed to signup
+          description: Failed to sign up
           schema:
             $ref: '#/definitions/response.Response'
       security:
       - ApiKeyAuth: []
-      summary: Signup (User)
+      summary: Sign up (User)
       tags:
       - User Authentication
   /chats:
@@ -393,6 +400,40 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get chats messages (User)
+      tags:
+      - Users Chats
+    post:
+      description: API for user to save a new message
+      operationId: SaveMessage
+      parameters:
+      - description: Chat ID
+        in: path
+        name: chat_id
+        required: true
+        type: integer
+      - description: Message field
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/request.Message'
+      responses:
+        "200":
+          description: Successfully message saved
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: integer
+              type: object
+        "500":
+          description: Failed to save message
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Save message (User)
       tags:
       - Users Chats
   /users:

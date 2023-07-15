@@ -237,7 +237,7 @@ const docTemplate = `{
                 "tags": [
                     "User Authentication"
                 ],
-                "summary": "Signup (User)",
+                "summary": "Sign up (User)",
                 "operationId": "UserSignUp",
                 "parameters": [
                     {
@@ -270,7 +270,7 @@ const docTemplate = `{
                         }
                     },
                     "500": {
-                        "description": "Failed to signup",
+                        "description": "Failed to sign up",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -461,6 +461,63 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for user to save a new message",
+                "tags": [
+                    "Users Chats"
+                ],
+                "summary": "Save message (User)",
+                "operationId": "SaveMessage",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Chat ID",
+                        "name": "chat_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Message field",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.Message"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully message saved",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to save message",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
             }
         },
         "/users": {
@@ -569,6 +626,17 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 15,
                     "minLength": 3
+                }
+            }
+        },
+        "request.Message": {
+            "type": "object",
+            "required": [
+                "content"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
                 }
             }
         },
