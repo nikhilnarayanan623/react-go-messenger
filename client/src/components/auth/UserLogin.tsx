@@ -1,14 +1,17 @@
-import React from "react";
-import { Link,useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { userLoginValidationSchema } from "../../validations/userValidations";
 import { UserLoginInfo } from "../../types/User";
 import { toast } from "react-toastify";
 import UserAuth from "../../api/auth/user";
+import GoogleAuthComponent from "./GoogleAuth";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const UserLogin: React.FC = () => {
   const userAuth = UserAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleSubmit = async (userInfo: UserLoginInfo) => {
     try {
@@ -16,12 +19,16 @@ const UserLogin: React.FC = () => {
       toast.success(response?.message || "Successfully logged in", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
-      response?.success && navigate("/")
+      response?.success && navigate("/");
     } catch (error: any) {
       toast.error(error?.data?.error[0] || "Failed to login", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -67,32 +74,32 @@ const UserLogin: React.FC = () => {
               </div>
             </div>
 
-            <div>
-              <div className='flex items-center justify-between'>
-                <label
-                  htmlFor='password'
-                  className='block text-sm font-medium leading-6 text-gray-900'
-                >
-                  Password
-                </label>
-                <div className='text-sm'>
-                  <a
-                    href='/'
-                    className='font-semibold text-indigo-600 hover:text-indigo-500'
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-              </div>
-              <div className='mt-2'>
+            <div className='mb-6'>
+              <label
+                htmlFor='password'
+                className='mt-2 block text-sm font-medium leading-6 text-gray-900'
+              >
+                Password
+              </label>
+              <div className='mt-2 relative'>
                 <Field
                   id='password'
                   name='password'
-                  type='password'
-                  autoComplete='current-password'
+                  type={showPassword ? "text" : "password"}
+                  autoComplete='password'
                   required
                   className='pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-700 focus-visible:outline-none focus-visible:ring-blue-600 sm:text-sm sm:leading-6'
                 />
+                <div
+                  className='absolute inset-y-0 right-2 flex items-center'
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <AiFillEyeInvisible className='text-gray-500 cursor-pointer' />
+                  ) : (
+                    <AiFillEye className='text-gray-500 cursor-pointer' />
+                  )}
+                </div>
                 <ErrorMessage
                   name='password'
                   component='div'
@@ -102,6 +109,7 @@ const UserLogin: React.FC = () => {
             </div>
 
             <div>
+              <GoogleAuthComponent />
               <button
                 type='submit'
                 className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
