@@ -2,11 +2,11 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 import { API_BASE_URL } from "../constants/endpoints";
 import ApiError from "../utils/ApiError";
 
-const api: AxiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
 });
 
-api.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
   },
@@ -34,3 +34,5 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export default axiosInstance

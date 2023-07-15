@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { userLoginValidationSchema } from "../../validations/userValidations";
 import { UserLoginInfo } from "../../types/User";
@@ -7,15 +7,18 @@ import { toast } from "react-toastify";
 import UserAuth from "../../api/auth/user";
 
 const UserLogin: React.FC = () => {
-  const userAuth = UserAuth()
+  const userAuth = UserAuth();
+  const navigate = useNavigate()
+
   const handleSubmit = async (userInfo: UserLoginInfo) => {
     try {
-      console.log(userInfo);
-      const response = await userAuth.signIn(userInfo)
-      console.log(response)
-    } catch (error:any) {
-      console.log(error.data.message)
-      toast.error("Failed to login", {
+      const response = await userAuth.signIn(userInfo);
+      toast.success(response?.message || "Successfully logged in", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+      response?.success && navigate("/")
+    } catch (error: any) {
+      toast.error(error?.data?.error[0] || "Failed to login", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
     }
@@ -111,11 +114,11 @@ const UserLogin: React.FC = () => {
         <p className='mt-10 text-center text-sm text-gray-500'>
           Do not have an account?
           <Link
-            to={'/sign-up'}
+            to={"/sign-up"}
             className='font-semibold leading-6 text-indigo-600 hover:text-indigo-500'
           >
             Sign up
-          </Link>        
+          </Link>
         </p>
       </div>
     </div>

@@ -1,9 +1,9 @@
-export const API_BASE_URL = "http://localhost:8080/api"
+export const API_BASE_URL = "http://localhost:8080"
 
 const END_POINTS = {
-    SIGN_UP:`${API_BASE_URL}/auth/signup`,
-    SIGN_IN:`${API_BASE_URL}/auth/login`,
-    GET_ALL_USERS:`${API_BASE_URL}/users/all `
-}
+    SIGN_UP:`/api/auth/signup`,
+    SIGN_IN:`/api/auth/login`,
+    GET_ALL_USERS:`/api/users/all `
+}   
 
 export default END_POINTS

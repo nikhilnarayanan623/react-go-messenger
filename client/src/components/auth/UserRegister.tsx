@@ -24,8 +24,6 @@ const UserRegister: React.FC = () => {
   const handleSubmit = async (userInfo: UserRegisterInfo) => {
     try {
       const response = await userAuth.signUp(userInfo);
-      console.log(response);
-      console.log(userInfo);
     } catch (error: any) {
       toast.error(error?.data?.message, {
         position: toast.POSITION.BOTTOM_RIGHT,
