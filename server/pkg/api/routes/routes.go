@@ -10,14 +10,14 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 	middleware middleware.Middleware, userHandler interfaces.UserHandler,
 	chatHandler interfaces.ChatHandler) {
 
-	{ // auth side
+	{ // auth
 		api.POST(SignUpUrl, authHandler.UserSignUp)
 		api.POST(SignInUrl, authHandler.UserLogin)
 		api.POST(GoogleSignInUrl, authHandler.UserGoogleLogin)
 		api.POST(RenewAccessTokenUrl, authHandler.UserRenewAccessToken())
 	}
 
-	api.Use(middleware.AuthenticateUser())
+	// r := api.Use(middleware.AuthenticateUser())
 
 	{ // user
 		api.GET(ListAllUsersUrl, userHandler.ListUsers)
