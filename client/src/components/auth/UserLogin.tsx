@@ -4,12 +4,17 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { userLoginValidationSchema } from "../../validations/userValidations";
 import { UserLoginInfo } from "../../types/User";
 import { toast } from "react-toastify";
+import UserAuth from "../../api/auth/user";
 
 const UserLogin: React.FC = () => {
+  const userAuth = UserAuth()
   const handleSubmit = async (userInfo: UserLoginInfo) => {
     try {
       console.log(userInfo);
-    } catch (error) {
+      const response = await userAuth.signIn(userInfo)
+      console.log(response)
+    } catch (error:any) {
+      console.log(error.data.message)
       toast.error("Failed to login", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
@@ -106,7 +111,7 @@ const UserLogin: React.FC = () => {
         <p className='mt-10 text-center text-sm text-gray-500'>
           Do not have an account?
           <Link
-            to={'/'}
+            to={'/sign-up'}
             className='font-semibold leading-6 text-indigo-600 hover:text-indigo-500'
           >
             Sign up

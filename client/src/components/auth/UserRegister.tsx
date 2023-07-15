@@ -5,11 +5,13 @@ import { toast } from "react-toastify";
 import { UserRegisterInfo } from "../../types/User";
 import { Link } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import UserAuth from "../../api/auth/user";
 
 const UserRegister: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const userAuth = UserAuth();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -21,6 +23,8 @@ const UserRegister: React.FC = () => {
 
   const handleSubmit = async (userInfo: UserRegisterInfo) => {
     try {
+      const response = await userAuth.signUp(userInfo);
+      console.log(response);
       console.log(userInfo);
     } catch (error: any) {
       toast.error(error?.data?.message, {
@@ -50,7 +54,7 @@ const UserRegister: React.FC = () => {
             password: "",
             confirmPassword: "",
             mobile: "",
-            interests: [],
+            age: 0,
           }}
           validationSchema={userRegisterValidationSchema}
           onSubmit={handleSubmit}
@@ -231,7 +235,7 @@ const UserRegister: React.FC = () => {
         <p className='mt-10 text-center text-sm text-gray-500'>
           Already have an account?
           <Link
-            to='/login'
+            to='/sign-in'
             className='font-semibold leading-6 text-indigo-600 hover:text-indigo-500'
           >
             &nbsp; Sign in

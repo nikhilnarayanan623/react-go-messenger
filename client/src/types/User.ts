@@ -10,5 +10,5 @@ export interface UserRegisterInfo {
     password: string;
     confirmPassword: string;
     mobile: string;
-    interests: string[];
+    age: number;
   }
