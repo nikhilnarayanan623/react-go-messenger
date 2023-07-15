@@ -22,15 +22,13 @@ func NewServerHTTP(cfg config.Config, authHandler interfaces.AuthHandler,
 	chatHandler interfaces.ChatHandler) *Server {
 
 	engine := gin.New()
-	// engine.Use(cors.Default())
+
 	engine.Use(middleware.Cors())
 	engine.Use(gin.Logger())
 
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	api := engine.Group("/api")
-
-	routes.SetupRoutes(api, authHandler, middleware, userHandler, chatHandler)
+	routes.SetupRoutes(engine, authHandler, middleware, userHandler, chatHandler)
 
 	return &Server{
 		engine: engine,
