@@ -20,11 +20,12 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 	api.Use(middleware.AuthenticateUser())
 
 	{ // user
-		api.POST(ListAllUsersUrl, userHandler.ListUsers)
+		api.GET(ListAllUsersUrl, userHandler.ListUsers)
 	}
 
 	{ //chats
 
 		api.GET(RecentChatsUrl, chatHandler.GetRecentChats)
+		api.POST(CreateChatUrl, chatHandler.SaveChat)
 	}
 }

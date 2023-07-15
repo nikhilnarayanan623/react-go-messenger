@@ -50,3 +50,32 @@ func (c *chatHandler) GetRecentChats(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, http.StatusOK, "Successfully retrieved recent chats of user", chats)
 }
+
+// SaveChat godoc
+// @Summary Save New chat (User)
+// @Description API for user create a new chat with other user if already exist will return then existing chat id
+// @Security ApiKeyAuth
+// @Id SaveChat
+// @Tags Users Chats
+// @Param input body request.Chat true "Input fields"
+// @Router /api/chats [post]
+// @Success 200 {object} response.Response{data=uint} "Successfully chat saved"
+// @Failure 500 {object} response.Response{} "Failed save to chat for user"
+func (c *chatHandler) SaveChat(ctx *gin.Context) {
+
+	var body request.Chat
+
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, BindJsonFailMessage, err, body)
+		return
+	}
+	userID := request.GetUserIdFromContext(ctx)
+
+	chatID, err := c.usecase.SaveChat(ctx, userID, body.OtherUserID)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusInternalServerError, "Failed to chat for user", err, nil)
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusCreated, "Successfully chat saved", chatID)
+}

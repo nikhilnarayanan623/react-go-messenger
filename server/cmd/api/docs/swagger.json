@@ -328,6 +328,56 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for user create a new chat with other user if already exist will return then existing chat id",
+                "tags": [
+                    "Users Chats"
+                ],
+                "summary": "Save New chat (User)",
+                "operationId": "SaveChat",
+                "parameters": [
+                    {
+                        "description": "Input fields",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.Chat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully chat saved",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Failed save to chat for user",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/users/all": {
@@ -396,6 +446,17 @@
         }
     },
     "definitions": {
+        "request.Chat": {
+            "type": "object",
+            "required": [
+                "other_user_id"
+            ],
+            "properties": {
+                "other_user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.GoogleLogin": {
             "type": "object",
             "required": [
