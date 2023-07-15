@@ -27,7 +27,7 @@ func NewAuthHandler(authUsecase usecaseInterface.AuthUseCase) interfaces.AuthHan
 
 // UserLogin godoc
 // @Summary Login with password (User)
-// @Description API for user to login with email | phone | user_name with password
+// @Description API for user to login with email | user_name with password
 // @Security ApiKeyAuth
 // @Id UserLogin
 // @Tags User Authentication
