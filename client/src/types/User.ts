@@ -4,11 +4,11 @@ export interface UserLoginInfo {
 }
 
 export interface UserRegisterInfo {
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
+    user_name:string;
     email: string;
     password: string;
-    confirmPassword: string;
-    mobile: string;
+    confirm_password: string;
     age: number;
   }

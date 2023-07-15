@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage,FormikHelpers } from "formik";
 import { userRegisterValidationSchema } from "../../validations/userValidations";
 import { toast } from "react-toastify";
 import { UserRegisterInfo } from "../../types/User";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import UserAuth from "../../api/auth/user";
 
@@ -12,6 +12,7 @@ const UserRegister: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const userAuth = UserAuth();
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -21,11 +22,24 @@ const UserRegister: React.FC = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSubmit = async (userInfo: UserRegisterInfo) => {
+  const handleSubmit = async (
+    userInfo: UserRegisterInfo,
+    { resetForm }: FormikHelpers<UserRegisterInfo>
+  ) => {
     try {
+      let age: number;
+      if (typeof userInfo.age === "string") {
+        age = parseInt(userInfo.age);
+        userInfo.age = age;
+      }
       const response = await userAuth.signUp(userInfo);
+      toast.success(response?.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+      resetForm()
+      response.success && navigate("/sign-in");
     } catch (error: any) {
-      toast.error(error?.data?.message, {
+      toast.error(error?.data?.error[0], {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
     }
@@ -46,12 +60,12 @@ const UserRegister: React.FC = () => {
         </div>
         <Formik
           initialValues={{
-            firstName: "",
-            lastName: "",
+            first_name: "",
+            last_name: "",
+            user_name: "",
             email: "",
             password: "",
-            confirmPassword: "",
-            mobile: "",
+            confirm_password: "",
             age: 0,
           }}
           validationSchema={userRegisterValidationSchema}
@@ -61,22 +75,22 @@ const UserRegister: React.FC = () => {
             <div className='flex flex-wrap -mx-3 mb-4'>
               <div className='w-full md:w-1/2 px-3 mb-6 md:mb-0'>
                 <label
-                  htmlFor='lastName'
+                  htmlFor='first_name'
                   className='mt-2 block text-sm font-medium leading-6 text-gray-900'
                 >
                   First Name
                 </label>
                 <div className='mt-2'>
                   <Field
-                    id='firstName'
-                    name='firstName'
-                    type='firstName'
-                    autoComplete='firstName'
+                    id='first_name'
+                    name='first_name'
+                    type='text'
+                    autoComplete='first_name'
                     required
                     className=' pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-700 focus-visible:outline-none focus-visible:ring-blue-600 sm:text-sm sm:leading-6'
                   />
                   <ErrorMessage
-                    name='firstName'
+                    name='first_name'
                     component='div'
                     className='text-red-500 text-sm'
                   />
@@ -84,28 +98,78 @@ const UserRegister: React.FC = () => {
               </div>
               <div className='w-full md:w-1/2 px-3'>
                 <label
-                  htmlFor='lastName'
+                  htmlFor='last_name'
                   className='mt-2 block text-sm font-medium leading-6 text-gray-900'
                 >
                   Last Name
                 </label>
                 <div className='mt-2'>
                   <Field
-                    id='lastName'
-                    name='lastName'
-                    type='lastName'
-                    autoComplete='lastName'
+                    id='last_name'
+                    name='last_name'
+                    type='text'
+                    autoComplete='last_name'
                     required
                     className=' pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-700 focus-visible:outline-none focus-visible:ring-blue-600 sm:text-sm sm:leading-6'
                   />
                   <ErrorMessage
-                    name='lastName'
+                    name='last_name'
                     component='div'
                     className='text-red-500 text-sm'
                   />
                 </div>
               </div>
             </div>
+            <div className='flex flex-wrap -mx-3 mb-4'>
+              <div className='w-full md:w-1/2 px-3'>
+                <label
+                  htmlFor='user_name'
+                  className='mt-2 block text-sm font-medium leading-6 text-gray-900'
+                >
+                  Username
+                </label>
+                <div className='mt-2'>
+                  <Field
+                    id='user_name'
+                    name='user_name'
+                    type='text'
+                    autoComplete='user_name'
+                    required
+                    className=' pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-700 focus-visible:outline-none focus-visible:ring-blue-600 sm:text-sm sm:leading-6'
+                  />
+                  <ErrorMessage
+                    name='user_name'
+                    component='div'
+                    className='text-red-500 text-sm'
+                  />
+                </div>
+              </div>
+              <div className='w-full md:w-1/2 px-3 mb-6 md:mb-0'>
+                <label
+                  htmlFor='age'
+                  className='block mt-2 text-sm font-medium leading-6 text-gray-900'
+                >
+                  Age
+                </label>
+                <div className='mt-2'>
+                  <Field
+                    id='age'
+                    name='age'
+                    type='text'
+                    autoComplete='age'
+                    maxLength={2}
+                    required
+                    className=' pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-700 focus-visible:outline-none focus-visible:ring-blue-600 sm:text-sm sm:leading-6'
+                  />
+                  <ErrorMessage
+                    name='age'
+                    component='div'
+                    className='text-red-500 text-sm'
+                  />
+                </div>
+              </div>
+            </div>
+
             <div>
               <label
                 htmlFor='email'
@@ -129,37 +193,12 @@ const UserRegister: React.FC = () => {
                 />
               </div>
             </div>
-
-            <div>
-              <label
-                htmlFor='age'
-                className='block mt-2 text-sm font-medium leading-6 text-gray-900'
-              >
-                Age
-              </label>
-              <div className='mt-2'>
-                <Field
-                  id='age'
-                  name='age'
-                  type='text'
-                  autoComplete='age'
-                  maxLength={2}
-                  required
-                  className=' pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-700 focus-visible:outline-none focus-visible:ring-blue-600 sm:text-sm sm:leading-6'
-                />
-                <ErrorMessage
-                  name='age'
-                  component='div'
-                  className='text-red-500 text-sm'
-                />
-              </div>
-            </div>
             <div className='mb-6'>
               <label
-                htmlFor='confirmPassword'
+                htmlFor='password'
                 className='mt-2 block text-sm font-medium leading-6 text-gray-900'
               >
-                Confirm password
+                Password
               </label>
               <div className='mt-2 relative'>
                 <Field
@@ -189,17 +228,17 @@ const UserRegister: React.FC = () => {
             </div>
             <div className='mb-6'>
               <label
-                htmlFor='confirmPassword'
+                htmlFor='confirm_password'
                 className='mt-2 block text-sm font-medium leading-6 text-gray-900'
               >
                 Confirm password
               </label>
               <div className='mt-2 relative'>
                 <Field
-                  id='confirmPassword'
-                  name='confirmPassword'
+                  id='confirm_password'
+                  name='confirm_password'
                   type={showConfirmPassword ? "text" : "password"}
-                  autoComplete='confirmPassword'
+                  autoComplete='confirm_password'
                   required
                   className='pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-700 focus-visible:outline-none focus-visible:ring-blue-600 sm:text-sm sm:leading-6'
                 />
@@ -214,7 +253,7 @@ const UserRegister: React.FC = () => {
                   )}
                 </div>
                 <ErrorMessage
-                  name='confirmPassword'
+                  name='confirm_password'
                   component='div'
                   className='text-red-500 text-sm'
                 />
