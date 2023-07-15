@@ -1,4 +1,11 @@
 definitions:
+  request.Chat:
+    properties:
+      other_user_id:
+        type: integer
+    required:
+    - other_user_id
+    type: object
   request.GoogleLogin:
     properties:
       token:
@@ -302,6 +309,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get user chats (User)
+      tags:
+      - Users Chats
+    post:
+      description: API for user create a new chat with other user if already exist
+        will return then existing chat id
+      operationId: SaveChat
+      parameters:
+      - description: Input fields
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/request.Chat'
+      responses:
+        "200":
+          description: Successfully chat saved
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: integer
+              type: object
+        "500":
+          description: Failed save to chat for user
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Save New chat (User)
       tags:
       - Users Chats
   /api/users/all:

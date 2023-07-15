@@ -10,8 +10,9 @@ const (
 	RenewAccessTokenUrl = AuthUrl + "/renew-access-token"
 
 	UserBaseUrl     = BaseUrl + "/users"
-	ListAllUsersUrl = "/all"
+	ListAllUsersUrl = UserBaseUrl + "/all"
 
 	ChatBaseUrl    = BaseUrl + "/chats"
 	RecentChatsUrl = ChatBaseUrl + ""
+	CreateChatUrl  = ChatBaseUrl + ""
 )
