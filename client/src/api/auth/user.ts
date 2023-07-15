@@ -1,6 +1,6 @@
 import { UserRegisterInfo, UserLoginInfo } from "../../types/User";
 import END_POINTS from "../../constants/endpoints";
-import axiosInstance from "../../middleWares/interceptors";
+import axiosInstance from "../middleWares/interceptors";
 const UserAuth = () => {
   const signUp = async (userInfo: UserRegisterInfo) => {
     const response = await axiosInstance.post(END_POINTS.SIGN_UP, userInfo);
