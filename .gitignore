@@ -24,6 +24,6 @@ go.work
 #client 
 
 /client/node_modules/
-/client/build/
+/client/.vite/
 
 
