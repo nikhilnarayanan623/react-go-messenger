@@ -80,6 +80,17 @@ definitions:
       user_name:
         type: string
     type: object
+  response.Message:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      is_current_user:
+        type: boolean
+      message_id:
+        type: integer
+    type: object
   response.Response:
     properties:
       data: {}
@@ -339,6 +350,49 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Save New chat (User)
+      tags:
+      - Users Chats
+  /api/chats/{chat_id}/messages:
+    get:
+      description: API for user to get all messages in a specific chat
+      operationId: GetAllMessages
+      parameters:
+      - description: Chat ID
+        in: path
+        name: chat_id
+        required: true
+        type: integer
+      - description: Page Number
+        in: query
+        name: page_number
+        type: integer
+      - description: Count
+        in: query
+        name: count
+        type: integer
+      responses:
+        "200":
+          description: Successfully retrieved message for the chat
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.Message'
+                  type: array
+              type: object
+        "204":
+          description: There is no message between users
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Failed to retrieve message for this chat
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get chats messages (User)
       tags:
       - Users Chats
   /api/users/all:

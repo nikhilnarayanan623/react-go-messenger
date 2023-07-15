@@ -60,3 +60,19 @@ func (c *chatDatabase) FindChatIDByUser1AndUser2ID(ctx context.Context, user1ID,
 
 	return
 }
+
+func (c *chatDatabase) FindAllMessagesByChatAndUserID(ctx context.Context,
+	chatID, userID uint, pagination request.Pagination) (messages []response.Message, err error) {
+
+	limit := pagination.Count
+	offset := (pagination.PageNumber - 1) * limit
+
+	query := `SELECT id, content, created_at, 
+	CASE WHEN sender_id = $1 THEN 'T' ELSE 'F' END AS is_current_user FROM messages 
+	WHERE chat_id = $2
+	ORDER BY created_at DESC LIMIT $3 OFFSET $4`
+
+	err = c.db.Raw(query, userID, chatID, limit, offset).Scan(&messages).Error
+
+	return
+}

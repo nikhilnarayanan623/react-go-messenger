@@ -79,3 +79,39 @@ func (c *chatHandler) SaveChat(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, http.StatusCreated, "Successfully chat saved", chatID)
 }
+
+// GetAllMessages godoc
+// @Summary Get chats messages (User)
+// @Description API for user to get all messages in a specific chat
+// @Security ApiKeyAuth
+// @Id GetAllMessages
+// @Tags Users Chats
+// @Param chat_id path int true "Chat ID"
+// @Param page_number query int false "Page Number"
+// @Param count query int false "Count"
+// @Router /api/chats/{chat_id}/messages [get]
+// @Success 200 {object} response.Response{data=[]response.Message} "Successfully retrieved message for the chat"
+// @Success 204 {object} response.Response{} "There is no message between users"
+// @Failure 500 {object} response.Response{} "Failed to retrieve message for this chat"
+func (c *chatHandler) GetAllMessages(ctx *gin.Context) {
+
+	chatID, err := request.GetParamAsUint(ctx, "chat_id")
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, BindParamFailMessage, err, nil)
+		return
+	}
+	pagination := request.GetPagination(ctx)
+	userID := request.GetUserIdFromContext(ctx)
+
+	messages, err := c.usecase.FindAllMessagesOfUserForAChat(ctx, chatID, userID, pagination)
+
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusInternalServerError, "Failed to retrieve message for this chat", err, nil)
+	}
+
+	if len(messages) == 0 {
+		response.SuccessResponse(ctx, http.StatusNoContent, "There is no message between users", err)
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, "Successfully retrieved message for the chat", messages)
+}
