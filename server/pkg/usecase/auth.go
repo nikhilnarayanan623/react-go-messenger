@@ -68,30 +68,34 @@ func (c *authUseCase) GoogleLogin(ctx context.Context, token string) (userID uin
 
 	googleUser, err := c.googleAuth.Verify(ctx, token)
 	if err != nil {
-		return 0, err
+		return 0, utils.PrependMessageToError(err, "failed to verify token with google")
 	}
 
 	existUser, err := c.userRepo.FindUserByEmail(ctx, googleUser.Email)
 	if err != nil {
-		return userID, fmt.Errorf("failed to get user details with given email \nerror:%v", err.Error())
+		return userID, utils.PrependMessageToError(err, "failed to check user email on database")
 	}
 
 	if existUser.ID != 0 {
 		return existUser.ID, nil
 	}
 
-	// user := domain.User{
-	// 	GoogleImage: googleUser.Picture,
-	// 	FirstName: ,
-	// }
+	userName := utils.GenerateRandomUserName(googleUser.FirstName)
+	user := domain.User{
+		FirstName:   googleUser.FirstName,
+		LastName:    googleUser.LastName,
+		UserName:    userName,
+		Email:       googleUser.Email,
+		GoogleImage: googleUser.Picture,
+	}
 
-	// // create a random user name for user based on user name
-	// user.UserName = utils.GenerateRandomUserName(user.FirstName)
+	// create a random user name for user based on user name
+	user.UserName = utils.GenerateRandomUserName(user.FirstName)
 
-	// userID, err = c.userRepo.SaveUser(ctx, user)
-	// if err != nil {
-	// 	return userID, fmt.Errorf("failed to save user details \nerror:%v", err.Error())
-	// }
+	userID, err = c.userRepo.SaveUser(ctx, user)
+	if err != nil {
+		return userID, utils.PrependMessageToError(err, "failed to save user details on database")
+	}
 
 	return userID, nil
 }
