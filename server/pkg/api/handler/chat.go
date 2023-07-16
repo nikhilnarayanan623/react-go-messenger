@@ -7,17 +7,20 @@ import (
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/interfaces"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/request"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/response"
+	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/service"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/domain"
 	usecase "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/usecase/interfaces"
 )
 
 type chatHandler struct {
-	usecase usecase.ChatUseCase
+	usecase       usecase.ChatUseCase
+	socketService service.SocketService
 }
 
-func NewChatHandler(usecase usecase.ChatUseCase) interfaces.ChatHandler {
+func NewChatHandler(usecase usecase.ChatUseCase, socketService service.SocketService) interfaces.ChatHandler {
 	return &chatHandler{
-		usecase: usecase,
+		usecase:       usecase,
+		socketService: socketService,
 	}
 }
 
@@ -82,11 +85,11 @@ func (c *chatHandler) SaveChat(ctx *gin.Context) {
 }
 
 // GetAllMessages godoc
-// @Summary Get chats messages (User)
+// @Summary Get messages (User)
 // @Description API for user to get all messages in a specific chat
 // @Security ApiKeyAuth
 // @Id GetAllMessages
-// @Tags Users Chats
+// @Tags Users Message
 // @Param chat_id path int true "Chat ID"
 // @Param page_number query int false "Page Number"
 // @Param count query int false "Count"
@@ -122,7 +125,7 @@ func (c *chatHandler) GetAllMessages(ctx *gin.Context) {
 // @Description API for user to save a new message
 // @Security ApiKeyAuth
 // @Id SaveMessage
-// @Tags Users Chats
+// @Tags Users Message
 // @Param chat_id path int true "Chat ID"
 // @Param input body request.Message true "Message field"
 // @Router /chats/{chat_id}/messages [post]
@@ -152,6 +155,27 @@ func (c *chatHandler) SaveMessage(ctx *gin.Context) {
 		response.ErrorResponse(ctx, http.StatusInternalServerError, "Failed to save message", err, nil)
 		return
 	}
+	// send the message to the receiver
+	received := c.socketService.SendMessage(receiverID, service.Message{
+		ChatID:  chatID,
+		Content: body.Content,
+	})
 
-	response.SuccessResponse(ctx, http.StatusCreated, "Successfully message saved", receiverID)
+	if received {
+		response.SuccessResponse(ctx, http.StatusCreated, "Successfully message saved and received on other side", received)
+		return
+	}
+	response.SuccessResponse(ctx, http.StatusCreated, "Successfully message saved other user not active", received)
+}
+
+// ServeWebSocket godoc
+// @Summary Sever Socket Connection (User)
+// @Description API for user to create a web socket connection
+// @Security ApiKeyAuth
+// @Id ServeWebSocket
+// @Tags Users Socket
+// @Router /ws [get]
+func (c *chatHandler) ServeWebSocket(ctx *gin.Context) {
+
+	c.socketService.Upgrade(ctx, ctx.Writer, ctx.Request)
 }

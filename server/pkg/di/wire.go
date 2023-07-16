@@ -6,6 +6,7 @@ package di
 import (
 	http "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler"
+	handlerService "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/service"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/middleware"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/config"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/db"
@@ -34,6 +35,7 @@ func InitializeAPI(cfg config.Config) (*http.Server, error) {
 		usecase.NewChatUseCase,
 		usecase.NewUserUseCase,
 
+		handlerService.NewSocketService,
 		handler.NewAuthHandler,
 		handler.NewChatHandler,
 		handler.NewUserHandler,

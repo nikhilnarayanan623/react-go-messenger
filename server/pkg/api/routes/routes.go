@@ -20,6 +20,10 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 
 	authorized := api.Group("", middleware.AuthenticateUser())
 
+	{
+		api.GET(SocketUrl, chatHandler.ServeWebSocket)
+	}
+
 	{ // user
 		authorized.GET(ListAllUsersUrl, userHandler.ListUsers)
 	}
