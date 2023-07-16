@@ -10,6 +10,9 @@ const (
 	GoogleSignInUrl     = AuthUrl + "/google-sign-in"
 	RenewAccessTokenUrl = AuthUrl + "/renew-access-token"
 
+	// socket
+	SocketUrl = BaseUrl + "/ws"
+
 	// user
 	UserBaseUrl     = BaseUrl + "/users"
 	ListAllUsersUrl = UserBaseUrl

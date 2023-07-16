@@ -163,7 +163,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "API for user to login with email | phone | user_name with password",
+                "description": "API for user to login with email | user_name with password",
                 "tags": [
                     "User Authentication"
                 ],
@@ -401,9 +401,9 @@ const docTemplate = `{
                 ],
                 "description": "API for user to get all messages in a specific chat",
                 "tags": [
-                    "Users Chats"
+                    "Users Message"
                 ],
-                "summary": "Get chats messages (User)",
+                "summary": "Get messages (User)",
                 "operationId": "GetAllMessages",
                 "parameters": [
                     {
@@ -470,7 +470,7 @@ const docTemplate = `{
                 ],
                 "description": "API for user to save a new message",
                 "tags": [
-                    "Users Chats"
+                    "Users Message"
                 ],
                 "summary": "Save message (User)",
                 "operationId": "SaveMessage",
@@ -582,6 +582,22 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/ws": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for user to create a web socket connection",
+                "tags": [
+                    "Users Socket"
+                ],
+                "summary": "Sever Socket Connection (User)",
+                "operationId": "ServeWebSocket",
+                "responses": {}
             }
         }
     },

@@ -218,7 +218,7 @@ paths:
       - User Authentication
   /auth/sign-in:
     post:
-      description: API for user to login with email | phone | user_name with password
+      description: API for user to login with email | user_name with password
       operationId: UserLogin
       parameters:
       - description: Login Details
@@ -399,9 +399,9 @@ paths:
             $ref: '#/definitions/response.Response'
       security:
       - ApiKeyAuth: []
-      summary: Get chats messages (User)
+      summary: Get messages (User)
       tags:
-      - Users Chats
+      - Users Message
     post:
       description: API for user to save a new message
       operationId: SaveMessage
@@ -435,7 +435,7 @@ paths:
       - ApiKeyAuth: []
       summary: Save message (User)
       tags:
-      - Users Chats
+      - Users Message
   /users:
     get:
       description: API for user to list all users in the application
@@ -474,4 +474,14 @@ paths:
       summary: List all users (User)
       tags:
       - Users
+  /ws:
+    get:
+      description: API for user to create a web socket connection
+      operationId: ServeWebSocket
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Sever Socket Connection (User)
+      tags:
+      - Users Socket
 swagger: "2.0"
