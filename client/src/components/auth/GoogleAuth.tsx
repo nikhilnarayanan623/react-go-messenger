@@ -2,10 +2,13 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import UserAuth from "../../api/auth/user";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../features/slices/authSlice";
 
 function GoogleAuthComponent(): JSX.Element {
   const navigate = useNavigate();
   const userAuth = UserAuth();
+  const dispatch = useDispatch()
 
   const errorMessage = (): void => {
     toast.error("Failed to login by google,Please try again later", {
@@ -20,10 +23,12 @@ function GoogleAuthComponent(): JSX.Element {
         toast.success(response?.message, {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
+        const {access_token,refresh_token}:{access_token:string,refresh_token:string} = response.data
+        dispatch(setToken({access_token,refresh_token}))
         response?.success&&navigate('/')
       })
       .catch((error) => {
-        toast.error(error?.data?.error[0], {
+        toast.error(error?.data?.error[0] || "Failed to login with google", {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
       });

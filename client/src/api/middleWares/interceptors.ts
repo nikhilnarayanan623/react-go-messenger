@@ -6,6 +6,22 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
 });
 
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const tokenString = localStorage.getItem("access_token");
+    if (tokenString) {
+      const token = JSON.parse(tokenString);
+      config.headers.Authorization = `Bearer ${token.access_token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
@@ -13,7 +29,6 @@ axiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response) {
       const { data, status } = error.response;
-      console.log(data)
       switch (status) {
         case 400:
           throw new ApiError("Bad request", data);

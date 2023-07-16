@@ -13,8 +13,15 @@ import { PowerIcon } from "@heroicons/react/24/solid";
 import { BiSolidHome, BiSearch } from "react-icons/bi";
 import { MdOutlineExplore } from "react-icons/md";
 import { BsMessenger } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { clearToken } from "../../features/slices/authSlice";
 
-const  SideNav:React.FC=()=> {
+const SideNav: React.FC = () => {
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(clearToken());
+    location.reload();
+  };
   return (
     <Card className='fixed top-0  h-full w-full max-w-[17rem] p-4 rounded-none'>
       <div className='mb-2 flex items-center gap-4 p-4'>
@@ -31,48 +38,58 @@ const  SideNav:React.FC=()=> {
       </div>
       <List>
         <hr className='my-2 border-blue-gray-50' />
-        <ListItem>
-          <ListItemPrefix>
-            <BiSolidHome className='h-7 w-7' />
-          </ListItemPrefix>
-          <span className='mt-2'>Home</span>
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <BiSearch className='h-7 w-7' />
-          </ListItemPrefix>
-          <span className='mt-1'>Search</span>
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <MdOutlineExplore className='h-7 w-7' />
-          </ListItemPrefix>
-          <span className='mt-1'>Explore</span>
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <BsMessenger className='h-6 w-6' />
-          </ListItemPrefix>
-          <span className='mt-1'>Messages</span>
-          <ListItemSuffix>
-            <Chip
-              value='14'
-              size='sm'
-              variant='ghost'
-              color='blue-gray'
-              className='rounded-full'
-            />
-          </ListItemSuffix>
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <PowerIcon className='h-7 w-7 ' />
-          </ListItemPrefix>
-          <span className='mt-1'> Log Out</span>
-        </ListItem>
+        <Link to='/'>
+          <ListItem>
+            <ListItemPrefix>
+              <BiSolidHome className='h-7 w-7' />
+            </ListItemPrefix>
+            <span className='mt-2'>Home</span>
+          </ListItem>
+        </Link>
+        <Link to='/search'>
+          <ListItem>
+            <ListItemPrefix>
+              <BiSearch className='h-7 w-7' />
+            </ListItemPrefix>
+            <span className='mt-1'>Search</span>
+          </ListItem>
+        </Link>
+        <Link to='/explore'>
+          <ListItem>
+            <ListItemPrefix>
+              <MdOutlineExplore className='h-7 w-7' />
+            </ListItemPrefix>
+            <span className='mt-1'>Explore</span>
+          </ListItem>
+        </Link>
+        <Link to='messages'>
+          <ListItem>
+            <ListItemPrefix>
+              <BsMessenger className='h-6 w-6' />
+            </ListItemPrefix>
+            <span className='mt-1'>Messages</span>
+            <ListItemSuffix>
+              <Chip
+                value='14'
+                size='sm'
+                variant='ghost'
+                color='blue-gray'
+                className='rounded-full'
+              />
+            </ListItemSuffix>
+          </ListItem>
+        </Link>
+        {/* <Link to='/sign-in' onClick={handleLogout}> */}
+          <ListItem onClick={handleLogout}>
+            <ListItemPrefix>
+              <PowerIcon className='h-7 w-7 ' />
+            </ListItemPrefix>
+            <span className='mt-1'> Log Out</span>
+          </ListItem>
+        {/* </Link> */}
       </List>
     </Card>
   );
-}
+};
 
-export default SideNav
+export default SideNav;

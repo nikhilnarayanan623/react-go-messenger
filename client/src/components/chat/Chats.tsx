@@ -1,0 +1,78 @@
+import React, { useEffect, useState } from "react";
+import Friends from "./Friends";
+import { Link, Outlet } from "react-router-dom";
+import { PiMessengerLogo } from "react-icons/pi";
+import { List } from "@material-tailwind/react";
+import { useParams } from "react-router-dom";
+import UserChat from "../../api/chat/chats";
+import { RecentlyChattedFriends } from "../../types/Chat";
+import { useDispatch } from "react-redux";
+import { setCurrentChat,clearCurrentChat } from "../../features/slices/chatSlice";
+import {toast} from 'react-toastify'
+
+const Chats: React.FC = () => {
+  const { chatId } = useParams();
+  const [chats, setChats] = useState<RecentlyChattedFriends[] | null>(null);
+  const userChat = UserChat();
+  const dispatch = useDispatch();
+
+  const fetchChats = async () => {
+    try {
+      const response = await userChat.getRecentlyChattedFriends();
+      setChats(response?.data);
+    } catch (error:any) {
+      toast.error(error?.data?.error[0] || "Something went wrong", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
+  };
+  useEffect(() => {
+    fetchChats();
+     return () => {
+      dispatch(clearCurrentChat());
+    };
+  }, []);
+
+  return (
+    <div className='pl-10 flex h-screen'>
+      <div className=' w-3/12 '>
+        <div className=' w-full '>
+          <div className='p-5 border-b border-gray-300 pb-10'>Username</div>
+        </div>
+        <List className='p-0'>
+          {chats?.map((chat) => (
+            <Link
+              to={`message/${chat?.chat_id}`}
+              key={chat?.chat_id}
+              onClick={() => {
+                dispatch(setCurrentChat({ currentChat: chat }));
+              }}
+            >
+              <Friends {...chat} />
+            </Link>
+          ))}
+        </List>
+      </div>
+      <div className='pl-10 w-8/12 flex justify-center items-center'>
+        {chatId ? (
+          <Outlet />
+        ) : (
+          <div className='flex flex-col items-center'>
+            <PiMessengerLogo className=' h-14 w-14' />
+            <h2 className='text-2xl pt-1 font-bold text-blue-gray-900'>
+              Your messages
+            </h2>
+            <h5 className='text-blue-gray-900 text-lg '>
+              Send messages with your friends
+            </h5>
+            <button className='mt-2 bg-blue-500 rounded-md p-1 text-sm text-white hover:bg-blue-600'>
+              Send message
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Chats;

@@ -1,8 +1,7 @@
 import React from "react";
 import Avatar from "./Avatars";
 import PostCard from "./PostCard";
-import {IoIosArrowDropright} from "react-icons/io"
-
+import { IoIosArrowDropright } from "react-icons/io";
 
 const HomePage: React.FC = () => {
   return (
@@ -12,12 +11,12 @@ const HomePage: React.FC = () => {
         <Avatar />
         <Avatar />
         <Avatar />
-        <Avatar />  
         <Avatar />
         <Avatar />
-        <IoIosArrowDropright className="w-7 h-7 cursor-pointer text-blue-gray-700"/>
+        <Avatar />
+        <IoIosArrowDropright className='w-7 h-7 cursor-pointer text-blue-gray-700' />
       </div>
-      <div className="flex flex-col items-center ">
+      <div className='flex flex-col items-center '>
         <PostCard />
         <PostCard />
         <PostCard />
