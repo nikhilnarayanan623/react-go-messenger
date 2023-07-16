@@ -9,7 +9,7 @@ const initialState = {
     access_token,
     refresh_token,
   },
-  isLoggedIn: access_token ? true : false,
+  isLoggedIn: access_token !==null ? true : false,
 };
 
 const authSlice = createSlice({
@@ -61,7 +61,7 @@ export const selectAccessToken = (state:RootState)=> {
 }
 
 export const selectIsLoggedIn = () => {
-  const  accessToken = localStorage.getItem("accessToken");
+  const  accessToken = localStorage.getItem("access_token");
   return accessToken ? true : false;
 };
 

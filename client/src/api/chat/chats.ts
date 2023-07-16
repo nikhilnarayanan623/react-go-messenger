@@ -6,16 +6,25 @@ const UserChat = () => {
     return response.data;
   };
 
-  const getRecentChats = async (chatId: number) => {
+  const getRecentMessages = async (chatId: string) => {
     const response = await axiosInstance.get(
       `${END_POINTS.GET_RECENT_MESSAGES}/${chatId}/messages`
     );
     return response.data;
   };
 
+  const sendMessage = async (chatId: string, message: string) => {
+    const response = await axiosInstance.post(
+      `${END_POINTS.SEND_MESSAGE}/${chatId}/messages`,
+      { content: message }
+    );
+    return response.data;
+  };
+
   return {
     getRecentlyChattedFriends,
-    getRecentChats,
+    getRecentMessages,
+    sendMessage,
   };
 };
 

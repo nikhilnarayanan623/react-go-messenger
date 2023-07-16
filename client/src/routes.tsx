@@ -24,7 +24,7 @@ const AppRouter = createBrowserRouter([
     element:<Chats/>,
     children:[
       {
-        path:"message/:userId",
+        path:"message/:chatId",
         element:<SendMessages/>
       }
     ]

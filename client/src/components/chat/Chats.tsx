@@ -5,23 +5,32 @@ import { PiMessengerLogo } from "react-icons/pi";
 import { List } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
 import UserChat from "../../api/chat/chats";
+import { RecentlyChattedFriends } from "../../types/Chat";
+import { useDispatch } from "react-redux";
+import { setCurrentChat,clearCurrentChat } from "../../features/slices/chatSlice";
+import {toast} from 'react-toastify'
 
 const Chats: React.FC = () => {
-  const { userId } = useParams();
-  const [chats, setChats] = useState("");
+  const { chatId } = useParams();
+  const [chats, setChats] = useState<RecentlyChattedFriends[] | null>(null);
   const userChat = UserChat();
-  console.log(userId);
+  const dispatch = useDispatch();
 
   const fetchChats = async () => {
     try {
       const response = await userChat.getRecentlyChattedFriends();
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+      setChats(response?.data);
+    } catch (error:any) {
+      toast.error(error?.data?.error[0] || "Something went wrong", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     }
   };
   useEffect(() => {
     fetchChats();
+     return () => {
+      dispatch(clearCurrentChat());
+    };
   }, []);
 
   return (
@@ -31,20 +40,21 @@ const Chats: React.FC = () => {
           <div className='p-5 border-b border-gray-300 pb-10'>Username</div>
         </div>
         <List className='p-0'>
-          <Link to='message/8'>
-            <Friends />
-          </Link>
-          <Friends />
-          <Friends />
-          <Friends />
-          <Friends />
-          <Friends />
-          <Friends />
-          <Friends />
+          {chats?.map((chat) => (
+            <Link
+              to={`message/${chat?.chat_id}`}
+              key={chat?.chat_id}
+              onClick={() => {
+                dispatch(setCurrentChat({ currentChat: chat }));
+              }}
+            >
+              <Friends {...chat} />
+            </Link>
+          ))}
         </List>
       </div>
       <div className='pl-10 w-8/12 flex justify-center items-center'>
-        {userId ? (
+        {chatId ? (
           <Outlet />
         ) : (
           <div className='flex flex-col items-center'>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { userLoginValidationSchema } from "../../validations/userValidations";
@@ -9,11 +9,14 @@ import GoogleAuthComponent from "./GoogleAuth";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../features/slices/authSlice";
+import { useSelector } from "react-redux";
+import { selectIsLoggedIn } from "../../features/slices/authSlice";
 
 const UserLogin: React.FC = () => {
   const userAuth = UserAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch()
+  const loggedIn = useSelector(selectIsLoggedIn)
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleSubmit = async (userInfo: UserLoginInfo) => {
@@ -22,7 +25,6 @@ const UserLogin: React.FC = () => {
       toast.success(response?.message || "Successfully logged in", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
-      console.log(response)
       const {access_token,refresh_token}:{access_token:string,refresh_token:string} = response.data
       dispatch(setToken({access_token,refresh_token}))
       response?.success && navigate("/");
@@ -31,8 +33,13 @@ const UserLogin: React.FC = () => {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
     }
-  };
-
+  }; 
+  useEffect(() => {
+    if (loggedIn) {
+      navigate("/");
+    }
+  }, [loggedIn, navigate]);
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

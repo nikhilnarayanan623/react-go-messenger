@@ -13,8 +13,15 @@ import { PowerIcon } from "@heroicons/react/24/solid";
 import { BiSolidHome, BiSearch } from "react-icons/bi";
 import { MdOutlineExplore } from "react-icons/md";
 import { BsMessenger } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { clearToken } from "../../features/slices/authSlice";
 
 const SideNav: React.FC = () => {
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(clearToken());
+    location.reload();
+  };
   return (
     <Card className='fixed top-0  h-full w-full max-w-[17rem] p-4 rounded-none'>
       <div className='mb-2 flex items-center gap-4 p-4'>
@@ -72,12 +79,14 @@ const SideNav: React.FC = () => {
             </ListItemSuffix>
           </ListItem>
         </Link>
-        <ListItem>
-          <ListItemPrefix>
-            <PowerIcon className='h-7 w-7 ' />
-          </ListItemPrefix>
-          <span className='mt-1'> Log Out</span>
-        </ListItem>
+        {/* <Link to='/sign-in' onClick={handleLogout}> */}
+          <ListItem onClick={handleLogout}>
+            <ListItemPrefix>
+              <PowerIcon className='h-7 w-7 ' />
+            </ListItemPrefix>
+            <span className='mt-1'> Log Out</span>
+          </ListItem>
+        {/* </Link> */}
       </List>
     </Card>
   );

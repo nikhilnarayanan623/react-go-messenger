@@ -6,7 +6,8 @@ const END_POINTS = {
     GOOGLE_SIGN_IN:"/api/auth/google-sign-in",
     GET_ALL_USERS:"/api/users/all ",
     GET_MY_CHATS:"/api/chats",
-    GET_RECENT_MESSAGES:"/api/chats"
+    GET_RECENT_MESSAGES:"/api/chats",
+    SEND_MESSAGE:"/api/chats"
 }   
 
 export default END_POINTS
