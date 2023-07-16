@@ -11,7 +11,7 @@ function App() {
       <div className="w-7/12">
         <HomePage />
       </div>
-      <div className=" w-3/12 p-5">
+      <div className=" w-3/12 p-5 ">
         <Suggestions />
       </div>
     </div>
