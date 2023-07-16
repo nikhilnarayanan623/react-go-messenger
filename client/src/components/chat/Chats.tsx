@@ -9,6 +9,7 @@ import { RecentlyChattedFriends } from "../../types/Chat";
 import { useDispatch } from "react-redux";
 import { setCurrentChat,clearCurrentChat } from "../../features/slices/chatSlice";
 import {toast} from 'react-toastify'
+import { sortByProperty } from "../../utils/helpers";
 
 const Chats: React.FC = () => {
   const { chatId } = useParams();
@@ -19,7 +20,8 @@ const Chats: React.FC = () => {
   const fetchChats = async () => {
     try {
       const response = await userChat.getRecentlyChattedFriends();
-      setChats(response?.data);
+      const sortedData: RecentlyChattedFriends[] = sortByProperty(response?.data, "last_message_at", true);
+      setChats(sortedData);
     } catch (error:any) {
       toast.error(error?.data?.error[0] || "Something went wrong", {
         position: toast.POSITION.BOTTOM_RIGHT,
