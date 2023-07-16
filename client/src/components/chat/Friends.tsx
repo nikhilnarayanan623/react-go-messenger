@@ -1,5 +1,4 @@
 import {
-    List,
     ListItem,
     ListItemPrefix,
     Avatar,

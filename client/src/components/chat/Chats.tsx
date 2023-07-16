@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Friends from "./Friends";
 import { Link, Outlet } from "react-router-dom";
 import { PiMessengerLogo } from "react-icons/pi";
 import { List } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
+import UserChat from "../../api/chat/chats";
 
 const Chats: React.FC = () => {
   const { userId } = useParams();
+  const [chats, setChats] = useState("");
+  const userChat = UserChat();
+  console.log(userId);
+
+  const fetchChats = async () => {
+    try {
+      const response = await userChat.getRecentlyChattedFriends();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchChats();
+  }, []);
+
   return (
     <div className='pl-10 flex h-screen'>
       <div className=' w-3/12 '>

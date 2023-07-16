@@ -6,6 +6,22 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
 });
 
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const tokenString = localStorage.getItem("access_token");
+    if (tokenString) {
+      const token = JSON.parse(tokenString);
+      config.headers.Authorization = `Bearer ${token.access_token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
