@@ -3,6 +3,7 @@ package google
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/config"
 	"google.golang.org/api/idtoken"
@@ -49,12 +50,27 @@ func (c *googleAuth) Verify(ctx context.Context, token string) (GoogleUser, erro
 		return GoogleUser{}, err
 	}
 
-	gUser := GoogleUser{
-		FirstName: payload.Claims["given_name"].(string),
-		LastName:  payload.Claims["family_name"].(string),
-		Email:     payload.Claims["email"].(string),
-		Picture:   payload.Claims["picture"].(string),
-	}
+	return getUserDetails(payload), nil
+}
 
-	return gUser, nil
+func getUserDetails(payload *idtoken.Payload) GoogleUser {
+	var user GoogleUser
+
+	if firstName, ok := payload.Claims["given_name"].(string); ok {
+		fmt.Println(firstName)
+		user.FirstName = firstName
+	}
+	if lastName, ok := payload.Claims["family_name"].(string); ok {
+		fmt.Println(lastName)
+		user.LastName = lastName
+	}
+	if email, ok := payload.Claims["email"].(string); ok {
+		fmt.Println(email)
+		user.Email = email
+	}
+	if picture, ok := payload.Claims["picture"].(string); ok {
+		fmt.Println(picture)
+		user.Picture = picture
+	}
+	return user
 }
