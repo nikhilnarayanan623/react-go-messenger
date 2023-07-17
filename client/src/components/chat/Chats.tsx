@@ -7,11 +7,17 @@ import { useParams } from "react-router-dom";
 import UserChat from "../../api/chat/chats";
 import { RecentlyChattedFriends } from "../../types/Chat";
 import { useDispatch } from "react-redux";
-import { setCurrentChat,clearCurrentChat } from "../../features/slices/chatSlice";
-import {toast} from 'react-toastify'
+import {
+  setCurrentChat,
+  clearCurrentChat,
+} from "../../features/slices/chatSlice";
+import { toast } from "react-toastify";
 import { sortByProperty } from "../../utils/helpers";
 
+
+
 const Chats: React.FC = () => {
+
   const { chatId } = useParams();
   const [chats, setChats] = useState<RecentlyChattedFriends[] | null>(null);
   const userChat = UserChat();
@@ -20,9 +26,13 @@ const Chats: React.FC = () => {
   const fetchChats = async () => {
     try {
       const response = await userChat.getRecentlyChattedFriends();
-      const sortedData: RecentlyChattedFriends[] = sortByProperty(response?.data, "last_message_at", true);
+      const sortedData: RecentlyChattedFriends[] = sortByProperty(
+        response?.data,
+        "last_message_at",
+        true
+      );
       setChats(sortedData);
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error?.data?.error[0] || "Something went wrong", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
@@ -30,10 +40,12 @@ const Chats: React.FC = () => {
   };
   useEffect(() => {
     fetchChats();
-     return () => {
+    return () => {
       dispatch(clearCurrentChat());
     };
   }, []);
+
+
 
   return (
     <div className='pl-10 flex h-screen'>
@@ -57,7 +69,8 @@ const Chats: React.FC = () => {
       </div>
       <div className='pl-10 w-8/12 flex justify-center items-center'>
         {chatId ? (
-          <Outlet />
+         
+            <Outlet />
         ) : (
           <div className='flex flex-col items-center'>
             <PiMessengerLogo className=' h-14 w-14' />
