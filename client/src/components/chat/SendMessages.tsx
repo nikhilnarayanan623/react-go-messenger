@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ListItem, ListItemPrefix, Avatar } from "@material-tailwind/react";
 import { Typography } from "@material-tailwind/react";
 import UserChat from "../../api/chat/chats";
@@ -6,20 +6,22 @@ import { useParams } from "react-router-dom";
 import { Message } from "../../types/Chat";
 import { useSelector } from "react-redux";
 import { selectCurrentChat } from "../../features/slices/chatSlice";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
 
 const SendMessages: React.FC = () => {
   const userChat = UserChat();
   const { chatId } = useParams();
+  const divRef = useRef<HTMLDivElement>(null);
   const [recentMessages, setRecentMessages] = useState<Message[] | null>(null);
   const [message, setMessage] = useState<string>("");
   const [messageStatus, setMessateStatus] = useState<boolean>(false);
   const currentChat = useSelector(selectCurrentChat);
+
   const fechRecentMessage = async () => {
     try {
       const response = await userChat.getRecentMessages(chatId ?? "");
       setRecentMessages(response?.data.reverse());
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error?.data?.error[0] || "Something went wrong", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
@@ -42,17 +44,38 @@ const SendMessages: React.FC = () => {
         setMessage("");
         setMessateStatus(!messageStatus);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error?.data?.error[0] || "Something went wrong", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
     }
   };
 
+ 
+  
+
+  useEffect(() => {
+    scrollDiv();
+  }, [recentMessages]);
+
   useEffect(() => {
     fechRecentMessage();
   }, [chatId, messageStatus]);
+
+  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") {
+      hanldeSendMessage();
+    }
+  }
+  const scrollDiv = () => {
+    const divElement = divRef.current;
+    if (divElement) {
+      divElement.scrollIntoView({behavior:"smooth"})
+    }
+  };
+
   const profilePic = false;
+
   return (
     <div className='w-full h-full flex flex-col'>
       <div>
@@ -90,6 +113,7 @@ const SendMessages: React.FC = () => {
           ({ message_id, content, created_at, is_current_user }) => {
             return (
               <ListItem
+               ref={divRef}
                 className={`rounded-none active:bg-transparent focus:bg-transparent focus:ring-0 hover:bg-transparent w-full pt-4 ${
                   is_current_user ? "flex-row-reverse" : "flex-row"
                 }`}
@@ -137,6 +161,7 @@ const SendMessages: React.FC = () => {
             placeholder='Message...'
             onInput={handleTypeChange}
             value={message}
+            onKeyDown={handleKeyPress}
             className='w-full focus:outline-none p-2 pr-10 rounded-3xl border-2 border-gray-300'
             type='text'
           />
