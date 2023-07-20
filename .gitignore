@@ -27,4 +27,5 @@ go.work
 /client/.vite/
 /client/tests
 
+/tmp
 
