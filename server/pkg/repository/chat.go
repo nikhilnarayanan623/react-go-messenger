@@ -28,7 +28,7 @@ func (c *chatDatabase) FindAllRecentChatsOfUser(ctx context.Context, userID uint
 	limit := pagination.Count
 	offset := (pagination.PageNumber - 1) * limit
 
-	query := `SELECT DISTINCT ON (chats.id) chats.id, he.first_name, he.user_name,
+	query := `SELECT DISTINCT ON (chats.id) chats.id, he.id AS user_id, he.first_name, he.user_name,
 	he.google_image AS profile_picture, messages.content AS last_message, messages.created_at AS last_message_at
 	FROM chats
 	INNER JOIN users me ON  me.id = chats.user1_id OR me.id = chats.user2_id
