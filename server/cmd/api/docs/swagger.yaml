@@ -474,14 +474,4 @@ paths:
       summary: List all users (User)
       tags:
       - Users
-  /ws:
-    get:
-      description: API for user to create a web socket connection
-      operationId: ServeWebSocket
-      responses: {}
-      security:
-      - ApiKeyAuth: []
-      summary: Sever Socket Connection (User)
-      tags:
-      - Users Socket
 swagger: "2.0"

@@ -19,7 +19,7 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 		auth.POST(RenewAccessTokenUrl, authHandler.UserRenewAccessToken())
 	}
 
-	api.GET("/ws", socketService.ServeWebSocket)
+	api.GET(SocketUrl, socketService.ServeWebSocket)
 
 	authorized := api.Group("", middleware.AuthenticateUser())
 

@@ -583,22 +583,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/ws": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "API for user to create a web socket connection",
-                "tags": [
-                    "Users Socket"
-                ],
-                "summary": "Sever Socket Connection (User)",
-                "operationId": "ServeWebSocket",
-                "responses": {}
-            }
         }
     },
     "definitions": {
