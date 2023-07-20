@@ -117,7 +117,7 @@ const SendMessages: React.FC = () => {
         }}
       >
         {recentMessages?.map(
-          ({ message_id, content, created_at, is_current_user }) => {
+          ({ message_id, content, is_current_user }) => {
             return (
               <ListItem
                ref={divRef}
