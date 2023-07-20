@@ -4,6 +4,7 @@ import "time"
 
 type Chat struct {
 	ID             uint      `json:"chat_id" `
+	UserID         uint      `json:"user_id"`
 	FirstName      string    `json:"first_name"`
 	UserName       string    `json:"user_name"`
 	ProfilePicture string    `json:"profile_picture"`

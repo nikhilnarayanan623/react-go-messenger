@@ -84,6 +84,8 @@ definitions:
         type: string
       profile_picture:
         type: string
+      user_id:
+        type: integer
       user_name:
         type: string
     type: object
@@ -474,4 +476,14 @@ paths:
       summary: List all users (User)
       tags:
       - Users
+  /ws:
+    get:
+      description: API for user to create a web socket connection
+      operationId: ServeWebSocket
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Sever Socket Connection (User)
+      tags:
+      - Users Socket
 swagger: "2.0"

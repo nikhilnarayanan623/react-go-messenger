@@ -583,6 +583,22 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/ws": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "API for user to create a web socket connection",
+                "tags": [
+                    "Users Socket"
+                ],
+                "summary": "Sever Socket Connection (User)",
+                "operationId": "ServeWebSocket",
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -706,6 +722,9 @@ const docTemplate = `{
                 },
                 "profile_picture": {
                     "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
                 },
                 "user_name": {
                     "type": "string"
