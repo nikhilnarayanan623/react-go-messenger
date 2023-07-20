@@ -12,7 +12,7 @@ const SendMessages: React.FC = () => {
   const userChat = UserChat();
   const { chatId } = useParams();
   const divRef = useRef<HTMLDivElement>(null);
-  const [recentMessages, setRecentMessages] = useState<Message[] | null>(null);
+  const [recentMessages, setRecentMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<string>("");
   const [messageStatus, setMessateStatus] = useState<boolean>(false);
   const currentChat = useSelector(selectCurrentChat);
@@ -20,7 +20,7 @@ const SendMessages: React.FC = () => {
   const fechRecentMessage = async () => {
     try {
       const response = await userChat.getRecentMessages(chatId ?? "");
-      setRecentMessages(response?.data.reverse());
+      setRecentMessages(response?.data.reverse() ?? []); // Handle the null case and initialize as an empty array
     } catch (error: any) {
       toast.error(error?.data?.error[0] || "Something went wrong", {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -40,6 +40,13 @@ const SendMessages: React.FC = () => {
         return;
       }
       const response = await userChat.sendMessage(chatId ?? "", trimmedMessage);
+      const myMessage:Message =   {
+        message_id:parseInt(chatId??""),
+        is_current_user: true,
+        content: trimmedMessage,
+        created_at:Date.now()
+      }
+      setRecentMessages((prevMessages) => [...prevMessages, myMessage]);
       if (response?.success) {
         setMessage("");
         setMessateStatus(!messageStatus);
@@ -60,7 +67,7 @@ const SendMessages: React.FC = () => {
 
   useEffect(() => {
     fechRecentMessage();
-  }, [chatId, messageStatus]);
+  }, [chatId]);
 
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
@@ -110,7 +117,7 @@ const SendMessages: React.FC = () => {
         }}
       >
         {recentMessages?.map(
-          ({ message_id, content, created_at, is_current_user }) => {
+          ({ message_id, content, is_current_user }) => {
             return (
               <ListItem
                ref={divRef}
