@@ -11,6 +11,6 @@ export interface RecentlyChattedFriends {
     message_id: number
     is_current_user: boolean
     content: string
-    created_at: string
+    created_at: string|number
   }
   
