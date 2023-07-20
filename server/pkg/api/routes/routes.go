@@ -4,11 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/handler/interfaces"
 	"github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/middleware"
+	socket "github.com/nikhilnarayanan623/react-go-messenger/server/pkg/api/service"
 )
 
 func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 	middleware middleware.Middleware, userHandler interfaces.UserHandler,
-	chatHandler interfaces.ChatHandler) {
+	chatHandler interfaces.ChatHandler, socketService socket.WebSocketService) {
 
 	auth := api.Group("")
 	{ // auth
@@ -18,11 +19,9 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 		auth.POST(RenewAccessTokenUrl, authHandler.UserRenewAccessToken())
 	}
 
-	authorized := api.Group("", middleware.AuthenticateUser())
+	api.GET("/ws", socketService.ServeWebSocket)
 
-	{
-		api.GET(SocketUrl, chatHandler.ServeWebSocket)
-	}
+	authorized := api.Group("", middleware.AuthenticateUser())
 
 	{ // user
 		authorized.GET(ListAllUsersUrl, userHandler.ListUsers)
