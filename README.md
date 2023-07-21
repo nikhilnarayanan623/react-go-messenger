@@ -71,11 +71,16 @@ To run the React-Go Messenger application on your local machine, follow these st
    ```
    cd server
    ```
+3. Install the dependencies:
+
+   ```
+   make deps || go mod tidy
+   ```
 
 7. Run the Go backend:
 
    ```
-   go run /cmd/api/main.go
+   make run || go run ./cmd/api/main.go
    ```
 
 8. Open the application in your browser and start messaging!
