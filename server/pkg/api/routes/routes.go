@@ -13,26 +13,26 @@ func SetupRoutes(api *gin.Engine, authHandler interfaces.AuthHandler,
 
 	auth := api.Group("")
 	{ // auth
-		auth.POST(SignUpUrl, authHandler.UserSignUp)
-		auth.POST(SignInUrl, authHandler.UserLogin)
-		auth.POST(GoogleSignInUrl, authHandler.UserGoogleLogin)
-		auth.POST(RenewAccessTokenUrl, authHandler.UserRenewAccessToken())
+		auth.POST(SignUpURL, authHandler.UserSignUp)
+		auth.POST(SignInURL, authHandler.UserLogin)
+		auth.POST(GoogleSignInURL, authHandler.UserGoogleLogin)
+		auth.POST(RenewAccessTokenURL, authHandler.UserRenewAccessToken())
 	}
 
-	api.GET(SocketUrl, socketService.ServeWebSocket)
+	api.GET(SocketURL, socketService.ServeWebSocket)
 
 	authorized := api.Group("", middleware.AuthenticateUser())
 
 	{ // user
-		authorized.GET(ListAllUsersUrl, userHandler.ListUsers)
+		authorized.GET(UsersURL, userHandler.ListAllUsers)
 	}
 
 	{ //chats
 
-		authorized.GET(RecentChatsUrl, chatHandler.GetRecentChats)
-		authorized.POST(CreateChatUrl, chatHandler.SaveChat)
+		authorized.GET(ChatsURL, chatHandler.GetRecentChats)
+		authorized.POST(ChatsURL, chatHandler.SaveChat)
 
-		authorized.GET(ListAllMessagesUrl, chatHandler.GetAllMessages)
-		authorized.POST(SaveMessageUrl, chatHandler.SaveMessage)
+		authorized.GET(ChatsMessgeURL, chatHandler.GetAllMessages)
+		authorized.POST(ChatsMessgeURL, chatHandler.SaveMessage)
 	}
 }
