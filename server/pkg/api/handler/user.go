@@ -20,11 +20,11 @@ func NewUserHandler(usecase usecaseInterface.UserUseCase) interfaces.UserHandler
 	}
 }
 
-// ListUsers godoc
+// ListAllUsers godoc
 // @Summary List all users (User)
 // @Description API for user to list all users in the application
 // @Security ApiKeyAuth
-// @Id ListUsers
+// @Id ListAllUsers
 // @Tags Users
 // @Param page_number query int false "Page Number"
 // @Param count query int false "Count"
@@ -32,7 +32,7 @@ func NewUserHandler(usecase usecaseInterface.UserUseCase) interfaces.UserHandler
 // @Success 200 {object} response.Response{data=[]response.User} "Successfully retrieved all users"
 // @Success 204 {object} response.Response{} "There is no users"
 // @Failure 500 {object} response.Response{} "Failed retrieved all users"
-func (c *userHandler) ListUsers(ctx *gin.Context) {
+func (c *userHandler) ListAllUsers(ctx *gin.Context) {
 
 	pagination := request.GetPagination(ctx)
 

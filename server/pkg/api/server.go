@@ -26,7 +26,7 @@ func NewServerHTTP(cfg config.Config, authHandler interfaces.AuthHandler,
 	engine.Use(middleware.Cors())
 	engine.Use(gin.Logger())
 
-	docs.SwaggerInfo.BasePath = routes.BaseUrl
+	docs.SwaggerInfo.BasePath = routes.BaseURL
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	routes.SetupRoutes(engine, authHandler, middleware, userHandler, chatHandler, socketService)

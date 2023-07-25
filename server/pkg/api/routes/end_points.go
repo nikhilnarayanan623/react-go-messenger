@@ -1,26 +1,26 @@
 package routes
 
 const (
-	BaseUrl = "/api"
+	BaseURL = "/api"
 
-	// auth
-	AuthUrl             = BaseUrl + "/auth"
-	SignUpUrl           = AuthUrl + "/sign-up"
-	SignInUrl           = AuthUrl + "/sign-in"
-	GoogleSignInUrl     = AuthUrl + "/google-sign-in"
-	RenewAccessTokenUrl = AuthUrl + "/renew-access-token"
+	// Authentication
+	AuthURL             = BaseURL + "/auth"
+	SignUpURL           = AuthURL + "/sign-up"
+	SignInURL           = AuthURL + "/sign-in"
+	GoogleSignInURL     = AuthURL + "/google-sign-in"
+	RenewAccessTokenURL = AuthURL + "/renew-access-token"
 
-	// socket
-	SocketUrl = BaseUrl + "/ws"
+	// Websockets
+	SocketURL = BaseURL + "/ws"
 
-	// user
-	UserBaseUrl     = BaseUrl + "/users"
-	ListAllUsersUrl = UserBaseUrl
+	// Users
+	UsersURL = BaseURL + "/users"
 
-	// chat
-	ChatBaseUrl        = BaseUrl + "/chats"
-	RecentChatsUrl     = ChatBaseUrl
-	CreateChatUrl      = ChatBaseUrl
-	ListAllMessagesUrl = ChatBaseUrl + "/:chat_id/messages"
-	SaveMessageUrl     = ChatBaseUrl + "/:chat_id/messages"
+	// Friends
+	UserFriendsURL        = UsersURL + "friends"
+	UserFriendsRequestUrl = UserFriendsURL + "/request"
+
+	// Chats
+	ChatsURL       = BaseURL + "/chats"
+	ChatsMessgeURL = ChatsURL + "/:chat_id/messages"
 )
