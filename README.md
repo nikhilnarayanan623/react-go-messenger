@@ -40,9 +40,9 @@ To run the React-Go Messenger application on your local machine, follow these st
 1. Clone the repository:
 
    ```
-   git clone https://github.com/your-username/react-go-messenger.git](https://github.com/nikhilnarayanan623/react-go-messenger
+   git clone https://github.com/nikhilnarayanan623/react-go-messenger.git
    ```
-
+## Client Side
 2. Change to the project directory:
 
    ```
@@ -66,6 +66,7 @@ To run the React-Go Messenger application on your local machine, follow these st
 
    This will launch the application in your default browser.
 
+## Server Side
 6. Change to the Go backend directory:
 
    ```
