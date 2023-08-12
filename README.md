@@ -106,6 +106,6 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use, mod
 If you have any questions or need further assistance, please feel free to contact the project maintainers:
 
 - Nikhil N - nikhilnarayanan623@gmail.com
-- Abin T H - abinth250@gmail.com
+- Abin T H - abinth.dev@gmail.com
 
 We hope you enjoy using React-Go Messenger! Happy messaging!
