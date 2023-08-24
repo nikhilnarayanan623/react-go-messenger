@@ -20,11 +20,11 @@ const AppRouter = createBrowserRouter([
     element:<UserRegister/>
   },
   {
-    path:"/messages",
+    path:"/chats",
     element:<Chats/>,
     children:[
       {
-        path:"message/:chatId",
+        path:"chat/:chatId/message/:receiverId",
         element:<SendMessages/>
       }
     ]

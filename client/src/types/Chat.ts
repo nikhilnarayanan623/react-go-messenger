@@ -1,5 +1,6 @@
 export interface RecentlyChattedFriends {
     chat_id: number
+    user_id:number
     first_name: string
     user_name: string
     profile_picture: string
@@ -8,7 +9,8 @@ export interface RecentlyChattedFriends {
   }
   
   export interface Message {
-    message_id: number
+    chat_id:number,
+    receiver_id: number
     is_current_user: boolean
     content: string
     created_at: string|number

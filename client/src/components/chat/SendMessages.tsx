@@ -7,20 +7,23 @@ import { Message } from "../../types/Chat";
 import { useSelector } from "react-redux";
 import { selectCurrentChat } from "../../features/slices/chatSlice";
 import { toast } from "react-toastify";
+import { useWebSocketContext } from "../../features/contexts/socketContext";
 
 const SendMessages: React.FC = () => {
   const userChat = UserChat();
-  const { chatId } = useParams();
+  const { chatId, receiverId } = useParams();
+  const params = useParams();
   const divRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [recentMessages, setRecentMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<string>("");
-  const [messageStatus, setMessateStatus] = useState<boolean>(false);
   const currentChat = useSelector(selectCurrentChat);
+  const { socket } = useWebSocketContext();
 
-  const fechRecentMessage = async () => {
+  const fetchRecentMessage = async () => {
     try {
       const response = await userChat.getRecentMessages(chatId ?? "");
-      setRecentMessages(response?.data.reverse() ?? []); // Handle the null case and initialize as an empty array
+      setRecentMessages(response?.data.reverse());
     } catch (error: any) {
       toast.error(error?.data?.error[0] || "Something went wrong", {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -33,23 +36,24 @@ const SendMessages: React.FC = () => {
     setMessage(message);
   };
 
-  const hanldeSendMessage = async () => {
+  const handleSendMessage = async () => {
     try {
       const trimmedMessage = message.trim();
       if (trimmedMessage === "") {
         return;
       }
       const response = await userChat.sendMessage(chatId ?? "", trimmedMessage);
-      const myMessage:Message =   {
-        message_id:parseInt(chatId??""),
+      const myMessage: Message = {
+        receiver_id: parseInt(receiverId ?? ""),
+        chat_id: parseInt(chatId ?? ""),
         is_current_user: true,
         content: trimmedMessage,
-        created_at:Date.now()
-      }
+        created_at: Date.now(),
+      };
+      socket?.send(JSON.stringify(myMessage));
       setRecentMessages((prevMessages) => [...prevMessages, myMessage]);
       if (response?.success) {
         setMessage("");
-        setMessateStatus(!messageStatus);
       }
     } catch (error: any) {
       toast.error(error?.data?.error[0] || "Something went wrong", {
@@ -58,28 +62,52 @@ const SendMessages: React.FC = () => {
     }
   };
 
- 
-  
+  useEffect(() => {
+    // setup on message portion
+    if (socket) {
+      socket.onmessage = (event) => {
+        console.log("on message: ", event);
+        try {
+          const messageData = JSON.parse(event.data);
+          console.log("data:= ", messageData);
+          const message: Message = {
+            chat_id: parseInt(chatId ?? ""),
+            receiver_id: parseInt(receiverId ?? ""),
+            is_current_user: false,
+            content: messageData.content,
+            created_at: Date.now(),
+          };
+          setRecentMessages((prevMessages) => [...prevMessages, message]);
+        } catch (error) {
+          console.log("Error parsing incoming message:", error);
+        }
+      };
+    }
+  }, [socket]);
 
   useEffect(() => {
     scrollDiv();
   }, [recentMessages]);
 
   useEffect(() => {
-    fechRecentMessage();
+    fetchRecentMessage();
   }, [chatId]);
+  useEffect(() => {
+    inputRef && inputRef.current?.focus();
+  }, [inputRef]);
 
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
-      hanldeSendMessage();
+      handleSendMessage();
     }
   }
   const scrollDiv = () => {
     const divElement = divRef.current;
     if (divElement) {
-      divElement.scrollIntoView({behavior:"smooth"})
+      divElement.scrollIntoView({ behavior: "smooth" });
     }
   };
+  console.log(recentMessages)
 
   const profilePic = false;
 
@@ -116,16 +144,17 @@ const SendMessages: React.FC = () => {
           scrollbarColor: "black",
         }}
       >
-        {recentMessages?.map(
-          ({ message_id, content, is_current_user }) => {
+        {recentMessages?.map(({ content, chat_id, is_current_user,receiver_id}, index) => {
+          console.log(chatId,chat_id)
+          if (parseInt(chatId ?? "") === chat_id) {
             return (
               <ListItem
-               ref={divRef}
+                ref={divRef}
                 className={`rounded-none active:bg-transparent focus:bg-transparent focus:ring-0 hover:bg-transparent w-full pt-4 ${
                   is_current_user ? "flex-row-reverse" : "flex-row"
                 }`}
                 ripple={false}
-                key={message_id}
+                key={index}
               >
                 <ListItemPrefix>
                   <Avatar
@@ -159,12 +188,13 @@ const SendMessages: React.FC = () => {
               </ListItem>
             );
           }
-        )}
+        })}
       </div>
 
       <div className='p-2 pb-5'>
         <div className='relative'>
           <input
+            ref={inputRef}
             placeholder='Message...'
             onInput={handleTypeChange}
             value={message}
@@ -174,7 +204,7 @@ const SendMessages: React.FC = () => {
           />
           <button
             disabled={message === ""}
-            onClick={hanldeSendMessage}
+            onClick={handleSendMessage}
             className={`absolute right-2 top-2 ${
               message === "" ? "text-blue-300" : "text-blue-600"
             } px-4 rounded`}

@@ -62,7 +62,7 @@ const SideNav: React.FC = () => {
             <span className='mt-1'>Explore</span>
           </ListItem>
         </Link>
-        <Link to='messages'>
+        <Link to='/chats'>
           <ListItem>
             <ListItemPrefix>
               <BsMessenger className='h-6 w-6' />

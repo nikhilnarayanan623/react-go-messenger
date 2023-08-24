@@ -6,22 +6,23 @@ import { List } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
 import UserChat from "../../api/chat/chats";
 import { RecentlyChattedFriends } from "../../types/Chat";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentChat,
   clearCurrentChat,
 } from "../../features/slices/chatSlice";
 import { toast } from "react-toastify";
 import { sortByProperty } from "../../utils/helpers";
-
-
+import { selectAccessToken } from "../../features/slices/authSlice";
+import { useWebSocketContext } from "../../features/contexts/socketContext";
 
 const Chats: React.FC = () => {
-
   const { chatId } = useParams();
   const [chats, setChats] = useState<RecentlyChattedFriends[] | null>(null);
   const userChat = UserChat();
   const dispatch = useDispatch();
+  const token = useSelector(selectAccessToken);
+  const { socket, setSocket } = useWebSocketContext();
 
   const fetchChats = async () => {
     try {
@@ -32,20 +33,51 @@ const Chats: React.FC = () => {
         true
       );
       setChats(sortedData);
+      console.log(sortedData)
     } catch (error: any) {
       toast.error(error?.data?.error[0] || "Something went wrong", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
     }
   };
+
+  useEffect(() => {
+    console.log("use effect of connect token");
+    const Socket = new WebSocket("ws://localhost:8080/api/ws");
+    if (token) {
+      Socket.onopen = () => {
+        console.log("Successfully Connected");
+
+        // sending token
+        console.log(
+          "!!!!! sending token if you see socket closed then check token is expired !!!!!"
+        );
+        Socket.send(
+          JSON.stringify({
+            token,
+          })
+        );
+        setSocket(Socket);
+      };
+      Socket.onclose = (event) => {
+        console.log("Socket Closed Connection: ", event);
+      };
+
+      Socket.onerror = (error) => {
+        console.log("Socket Error: ", error);
+      };
+      return () => {
+        Socket.close();
+      };
+    }
+  }, [token]);
+
   useEffect(() => {
     fetchChats();
     return () => {
       dispatch(clearCurrentChat());
     };
   }, []);
-
-
 
   return (
     <div className='pl-10 flex h-screen'>
@@ -56,11 +88,13 @@ const Chats: React.FC = () => {
         <List className='p-0'>
           {chats?.map((chat) => (
             <Link
-              to={`message/${chat?.chat_id}`}
+              to={`chat/${chat.chat_id}/message/${chat?.user_id}`}
               key={chat?.chat_id}
               onClick={() => {
                 dispatch(setCurrentChat({ currentChat: chat }));
+
               }}
+
             >
               <Friends {...chat} />
             </Link>
@@ -69,8 +103,7 @@ const Chats: React.FC = () => {
       </div>
       <div className='pl-10 w-8/12 flex justify-center items-center'>
         {chatId ? (
-         
-            <Outlet />
+          <Outlet />
         ) : (
           <div className='flex flex-col items-center'>
             <PiMessengerLogo className=' h-14 w-14' />

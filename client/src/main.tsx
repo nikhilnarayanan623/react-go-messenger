@@ -10,13 +10,16 @@ import ENV from "./constants/const.ts";
 import { ThemeProvider } from "@material-tailwind/react";
 import { Provider } from "react-redux";
 import { store } from "./features/store.ts";
+import { WebSocketProvider } from "./features/contexts/socketContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={ENV.VITE_GOOGLE_CLIENT_ID}>
       <Provider store={store}>
         <ThemeProvider>
+        <WebSocketProvider>
           <RouterProvider router={AppRouter} />
+        </WebSocketProvider>
           <ToastContainer />
         </ThemeProvider>
       </Provider>
