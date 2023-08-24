@@ -26,7 +26,7 @@ type webSocketService struct {
 }
 
 type Message struct {
-	RecieverID uint   `json:"reciever_id"`
+	ReceiverID uint   `json:"receiver_id"`
 	Content    string `json:"content"`
 }
 
@@ -150,7 +150,7 @@ func (c *webSocketService) sendMessge(messge Message) (received bool, err error)
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	// find other connection
-	conn, ok := c.connections[messge.RecieverID]
+	conn, ok := c.connections[messge.ReceiverID]
 	if !ok {
 		return false, nil
 	}
