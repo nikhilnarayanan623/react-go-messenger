@@ -54,9 +54,10 @@ export const { setToken, clearToken } = authSlice.actions;
 
 export const selectAuth = (state: RootState) => state.auth.data;
 
-export const selectAccessToken = (state: RootState) => {
-  const accessTokenString: string | null = state.auth.data.access_token;
-  return accessTokenString;
+export const selectAccessToken = () => {
+  const accessTokenString = localStorage.getItem("access_token")
+  const token =accessTokenString&&JSON.parse(accessTokenString);
+  return token.access_token
 };
 
 export const selectIsLoggedIn = () => {
