@@ -26,6 +26,8 @@ type webSocketService struct {
 }
 
 type Message struct {
+	SenderID   uint   `json:"sender_id"` // will remove if its not necessary
+	ChatID     uint   `json:"chat_id"`
 	ReceiverID uint   `json:"receiver_id"`
 	Content    string `json:"content"`
 }
@@ -52,7 +54,7 @@ func NewWebSocketService(tokenService token.TokenService) WebSocketService {
 // @Tags Users Socket
 // @Router /ws [get]
 func (c *webSocketService) ServeWebSocket(ctx *gin.Context) {
-	soketConn, err := c.upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	socketConn, err := c.upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 
 	if err != nil {
 		log.Println("failed to upgrade connection")
@@ -60,9 +62,9 @@ func (c *webSocketService) ServeWebSocket(ctx *gin.Context) {
 		return
 	}
 
-	closeHand := soketConn.CloseHandler()
+	closeHand := socketConn.CloseHandler()
 
-	userID, err := c.verifyConnection(ctx, soketConn)
+	userID, err := c.verifyConnection(ctx, socketConn)
 	if err != nil {
 		log.Println("failed to verify token", err)
 		closeHand(websocket.ClosePolicyViolation, err.Error())
@@ -70,12 +72,12 @@ func (c *webSocketService) ServeWebSocket(ctx *gin.Context) {
 	}
 
 	c.mu.Lock()
-	c.connections[userID] = soketConn
+	c.connections[userID] = socketConn
 	c.mu.Unlock()
 
-	{ // wait until the connectin close
+	{ // wait until the connection close
 		fmt.Println("successfully connected for user_id : ", userID)
-		go c.readMessages(ctx, soketConn) // read messages
+		go c.readMessages(ctx, socketConn) // read messages
 		<-ctx.Done()
 		log.Println("connection closed from request")
 	}
@@ -94,7 +96,7 @@ func (c *webSocketService) verifyConnection(ctx context.Context, sc *websocket.C
 	tokenChan := make(chan TokenRequest)
 	errChan := make(chan error)
 
-	// wait for the token to send within 5 second of connectin established
+	// wait for the token to send within 5 second of connection established
 	go func() {
 		var body TokenRequest
 		err := sc.ReadJSON(&body)
@@ -134,30 +136,30 @@ func (c *webSocketService) readMessages(ctx context.Context, sc *websocket.Conn)
 
 	}()
 
-	// get each messge and if the whole connectin lost then return
+	// get each message and if the whole connection lost then return
 	for {
 		select {
 		case message := <-messageChan:
-			go c.sendMessge(message)
+			go c.sendMessage(message)
 		case <-ctx.Done():
 			return
 		}
 	}
 }
 
-func (c *webSocketService) sendMessge(messge Message) (received bool, err error) {
+func (c *webSocketService) sendMessage(message Message) (received bool, err error) {
 
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	// find other connection
-	conn, ok := c.connections[messge.ReceiverID]
+	conn, ok := c.connections[message.ReceiverID]
 	if !ok {
 		return false, nil
 	}
 
 	// send to other connection
-	if err := conn.WriteJSON(messge); err != nil {
-		log.Println("failed to write message: ", messge)
+	if err := conn.WriteJSON(message); err != nil {
+		log.Println("failed to write message: ", message)
 		return false, err
 	}
 	return true, nil
