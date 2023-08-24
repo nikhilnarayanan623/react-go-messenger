@@ -12,7 +12,6 @@ import { useWebSocketContext } from "../../features/contexts/socketContext";
 const SendMessages: React.FC = () => {
   const userChat = UserChat();
   const { chatId, receiverId } = useParams();
-  const params = useParams();
   const divRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [recentMessages, setRecentMessages] = useState<Message[]>([]);
@@ -145,7 +144,7 @@ const SendMessages: React.FC = () => {
         }}
       >
         {recentMessages?.map(({ content, chat_id, is_current_user,receiver_id}, index) => {
-          console.log(chatId,chat_id)
+          console.log(chatId,chat_id,receiver_id)
           if (parseInt(chatId ?? "") === chat_id) {
             return (
               <ListItem
@@ -188,6 +187,7 @@ const SendMessages: React.FC = () => {
               </ListItem>
             );
           }
+          return null
         })}
       </div>
 

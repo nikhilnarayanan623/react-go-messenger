@@ -22,7 +22,7 @@ const Chats: React.FC = () => {
   const userChat = UserChat();
   const dispatch = useDispatch();
   const token = useSelector(selectAccessToken);
-  const { socket, setSocket } = useWebSocketContext();
+  const { setSocket } = useWebSocketContext();
 
   const fetchChats = async () => {
     try {
